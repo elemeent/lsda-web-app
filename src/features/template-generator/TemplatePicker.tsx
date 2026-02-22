@@ -7,7 +7,7 @@ interface TemplatePickerProps {
 function TemplatePicker({ onSelectTemplate }: TemplatePickerProps) {
   const templates = [
     {
-      id: "arraingment",
+      id: "arraignment",
       title: "Arraignment",
       description:
         "Generate arraignment documents with defendant information, charges, and bail recommendations.",
