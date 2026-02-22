@@ -1,13 +1,23 @@
 import Handlebars from "handlebars";
 
 Handlebars.registerHelper("math", function (lvalue, operator, rvalue) {
-  const expression = `${Number(lvalue)} ${operator} ${Number(rvalue)}`;
+  if (isNaN(lvalue) || isNaN(rvalue)) {
+    return "Invalid operands";
+  }
 
-  try {
-    return eval(expression);
-  } catch (e) {
-    console.error(e);
-    return "Error in math expression";
+  switch (operator) {
+    case "+":
+      return (Number(lvalue) + Number(rvalue)).toString();
+    case "-":
+      return (Number(lvalue) - Number(rvalue)).toString();
+    case "*":
+      return (Number(lvalue) * Number(rvalue)).toString();
+    case "/":
+      return (Number(lvalue) / Number(rvalue)).toString();
+    case "%":
+      return (Number(lvalue) % Number(rvalue)).toString();
+    default:
+      return "Invalid operator";
   }
 });
 
