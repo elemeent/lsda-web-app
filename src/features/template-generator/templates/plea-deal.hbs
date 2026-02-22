@@ -1,0 +1,146 @@
+<p>
+	<span style="color:#9b59b6;"><strong>** The following plea deal is submitted to the court clerk. **</strong></span><br>
+	&nbsp;
+</p>
+
+<p style="font-size:14px; text-align:center">
+	<a data-fileid="undefined" href="https://i.imgur.com/0nhFGWs.png" rel="external nofollow" style="background-color:transparent; color:#ffffff" target="_blank" title="Enlarge image"><img alt="0nhFGWs.png" data-ratio="100.00" height="150" src="https://i.imgur.com/0nhFGWs.png" style="border-style:none; vertical-align:middle" width="150"></a>
+</p>
+
+<p style="font-size:14px; text-align:start">
+	<strong>Office of The District Attorney</strong>
+</p>
+
+<p style="font-size:14px; text-align:start">
+	<strong>County of Los Santos</strong>
+</p>
+
+<hr style="font-size:13px; text-align:start">
+<p style="font-size:13px; text-align:start">
+	Per discussions, as they occurred between counsel, this document affirms a plea agreement between the People of the State of San Andreas by and through the Los Santos County District Attorney&#39;s Office{{#if hasCounsel}}, the&nbsp;<strong>DEFENDANT</strong><span>&nbsp;</span>and counsel<span>&nbsp;</span><strong>DEFENSE ATTORNEY</strong><span>&nbsp;</span>{{else}} and the&nbsp;<strong>DEFENDANT</strong><span>&nbsp;</span>{{/if}}on the following terms:
+</p>
+
+<p style="font-size:14px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="font-size:14px; text-align:start">
+	<strong>DEFENDANT<span>&nbsp;</span></strong>pleads guilty to the following charges:
+</p>
+
+<ul style="font-size:13px; text-align:start">
+    {{#each guiltyCharges}}
+	<li>
+		<b>{{this}}</b>
+	</li>
+    {{/each}}
+</ul>
+
+<p>
+	&nbsp;
+</p>
+
+{{#if dismissedCharges}}
+<p style="font-size:14px; text-align:start">
+	The following charges are to be dismissed:
+</p>
+
+<ul style="font-size:13px; text-align:start">
+    {{#each dismissedCharges}}
+	<li>
+		<b>{{this}}</b>
+	</li>
+    {{/each}}
+</ul>
+
+<p>
+	&nbsp;
+</p>
+{{/if}}
+
+<p style="font-size:13px; text-align:start">
+	In the light of this agreement, the People hereby agree to recommend that the court impose a sentence of:
+</p>
+
+<ul style="font-size:13px; text-align:start">
+    {{#each sentencingRecommendations}}
+	<li>
+		<strong>{{this}}</strong><br>		
+	</li>
+    {{/each}}
+</ul>
+
+<p>
+	&nbsp;
+</p>
+
+<p style="font-size:13px; text-align:start">
+	The Defendant agrees to waive his right to a trial by jury and to appeal and understands that this plea agreement is binding and cannot be changed.
+</p>
+
+<p style="font-size:14px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="font-size:14px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="font-size:14px; text-align:right">
+	<span><u><span style="font-size:16px"><em>/s/&nbsp;</em>{{prosecutor.name}}</span></u></span>
+</p>
+
+<p style="font-size:14px; text-align:right">
+	<span style="font-size:16px;">{{prosecutor.name}}</span>
+</p>
+
+<p style="font-size:13px; text-align:right">
+	<span><span style="font-size:16px">San Andreas State Bar No. {{prosecutor.stateBar}}</span></span>
+</p>
+
+<p style="font-size:13px; text-align:right">
+	<span><span style="font-size:16px">{{prosecutor.rank}}</span></span>
+</p>
+
+<p style="font-size:13px; text-align:right">
+	<span><span style="font-size:16px">Los Santos County District Attorney&#39;s Office</span></span>
+</p>
+
+<p>
+	&nbsp;
+</p>
+
+<p style="font-size:14px; text-align:right">
+	<span><u><span style="font-size:16px"><em>/s/&nbsp;</em>{{defendant.name}}</span></u></span>
+</p>
+
+<p style="text-align: right;">
+	<span style="font-size: 16px;">{{defendant.name}}</span>
+</p>
+
+<p style="font-size:13px; text-align:right">
+	<span><span style="font-size:16px">Defendant</span></span>
+</p>
+
+<p>
+	&nbsp;
+</p>
+
+{{#if hasCounsel}}
+<p style="font-size:14px; text-align:right">
+	<span><u><span style="font-size:16px"><em>/s/&nbsp;</em>{{defenseAttorney.name}}</span></u></span>
+</p>
+
+<p style="font-size:14px; text-align:right">
+	<span style="font-size:16px;">{{defenseAttorney.name}}</span>
+</p>
+
+<p style="font-size:13px; text-align:right">
+	<span><span style="font-size:16px">Defendant&#39;s Counsel</span></span>
+</p>
+{{/if}}
+
+<p>
+	<br>
+	(( Tag Invovled Parties Here ))
+</p>

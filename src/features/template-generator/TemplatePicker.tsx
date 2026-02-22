@@ -13,6 +13,13 @@ function TemplatePicker({ onSelectTemplate }: TemplatePickerProps) {
         "Generate arraignment documents with defendant information, charges, and bail recommendations.",
       icon: "⚖️",
     },
+    {
+      id: "plea-deal",
+      title: "Plea Deal",
+      description:
+        "Generate plea deal documents with defendant information, charges, and sentencing recommendations.",
+      icon: "🤝",
+    },
   ];
 
   return (

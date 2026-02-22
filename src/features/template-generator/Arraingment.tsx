@@ -69,7 +69,11 @@ function Arraignment() {
     defendant: {
       name: "",
     },
-    prosecutor: { name: "", stateBar: "", rank: "" },
+    prosecutor: {
+      name: localStorage.getItem("prosecutorName") || "",
+      stateBar: localStorage.getItem("prosecutorStateBar") || "",
+      rank: localStorage.getItem("prosecutorRank") || "",
+    },
     counts: [{ crime: "" }],
     exhibits: [{ number: "", title: "" }],
     sentencing: {
@@ -247,6 +251,10 @@ function Arraignment() {
     };
 
     render();
+
+    localStorage.setItem("prosecutorName", formData.prosecutor.name);
+    localStorage.setItem("prosecutorStateBar", formData.prosecutor.stateBar);
+    localStorage.setItem("prosecutorRank", formData.prosecutor.rank);
   }, [formData, exhibitPattern]);
 
   const handleChange = async (
@@ -310,6 +318,20 @@ function Arraignment() {
     }));
   };
 
+  const removeCrime = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      counts: prev.counts.filter((_, i) => i !== index),
+    }));
+  };
+
+  const removeExhibit = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      exhibits: prev.exhibits.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleExhibitPatternChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -339,7 +361,7 @@ function Arraignment() {
   };
 
   return (
-    <div className="arraignment-container">
+    <div className="main-template-page-container">
       <div className="form-section">
         <span className="form-section-title">
           Defendant & Prosecutor Information
@@ -401,14 +423,27 @@ function Arraignment() {
         <span className="form-section-title">Counts</span>
         {formData.counts.map((_, index) => (
           <div key={index} className="form-group">
-            <label>Count {index + 1} - Crime:</label>
-            <input
-              type="text"
-              name={`counts[${index}].crime`}
-              value={formData.counts[index].crime}
-              onChange={handleChange}
-              placeholder="Enter crime description"
-            />
+            <div className="form-group-with-button">
+              <div>
+                <label>Count {index + 1} - Crime:</label>
+                <input
+                  type="text"
+                  name={`counts[${index}].crime`}
+                  value={formData.counts[index].crime}
+                  onChange={handleChange}
+                  placeholder="Enter crime description"
+                />
+              </div>
+              {formData.counts.length > 1 && (
+                <button
+                  className="remove-button"
+                  onClick={() => removeCrime(index)}
+                  title="Remove this crime"
+                >
+                  −
+                </button>
+              )}
+            </div>
           </div>
         ))}
         <button onClick={addCrime}>+ Add Crime</button>
@@ -418,14 +453,27 @@ function Arraignment() {
         <span className="form-section-title">Exhibits</span>
         {formData.exhibits.map((_, index) => (
           <div key={index} className="form-group">
-            <label>Exhibit {index + 1} - Title:</label>
-            <input
-              type="text"
-              name={`exhibits[${index}].title`}
-              value={formData.exhibits[index].title}
-              onChange={handleChange}
-              placeholder="Enter exhibit title"
-            />
+            <div className="form-group-with-button">
+              <div>
+                <label>Exhibit {index + 1} - Title:</label>
+                <input
+                  type="text"
+                  name={`exhibits[${index}].title`}
+                  value={formData.exhibits[index].title}
+                  onChange={handleChange}
+                  placeholder="Enter exhibit title"
+                />
+              </div>
+              {formData.exhibits.length > 1 && (
+                <button
+                  className="remove-button"
+                  onClick={() => removeExhibit(index)}
+                  title="Remove this exhibit"
+                >
+                  −
+                </button>
+              )}
+            </div>
           </div>
         ))}
         <button onClick={addExhibit}>+ Add Exhibit</button>

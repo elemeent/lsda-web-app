@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Home.css";
 
 function Home() {
@@ -9,7 +10,6 @@ function Home() {
     const fetchAnimal = async () => {
       try {
         setLoading(true);
-        // Fetch random cat image as a cute alternative to monkeys
         const response = await fetch(
           "https://api.thecatapi.com/v1/images/search",
         );
@@ -19,17 +19,18 @@ function Home() {
         }
       } catch (error) {
         console.error("Failed to fetch animal:", error);
-        // Fallback to a placeholder
         setAnimalImage(
           "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=400&fit=crop",
         );
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchAnimal();
   }, []);
+
+  const handleImageLoad = () => {
+    setLoading(false);
+  };
 
   const refreshAnimal = () => {
     setLoading(true);
@@ -47,8 +48,6 @@ function Home() {
         setAnimalImage(
           "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=400&fit=crop",
         );
-      } finally {
-        setLoading(false);
       }
     };
     fetchAnimal();
@@ -67,7 +66,12 @@ function Home() {
         </p>
 
         {animalImage && (
-          <img src={animalImage} alt="Cute animal" className="home-animal" />
+          <img
+            src={animalImage}
+            alt="Cute animal"
+            className="home-animal"
+            onLoad={handleImageLoad}
+          />
         )}
 
         {loading ? (
@@ -80,9 +84,9 @@ function Home() {
 
         <p className="home-footer">
           In the meantime, check out the{" "}
-          <a href="/template-generator" className="home-footer-link">
+          <Link to="/template-generator" className="home-footer-link">
             Template Generator
-          </a>
+          </Link>
           !
         </p>
       </div>
