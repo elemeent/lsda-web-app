@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/lsda-web-app/">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
