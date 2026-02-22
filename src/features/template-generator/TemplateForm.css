@@ -244,7 +244,7 @@ button.copy-button.copied {
 }
 
 /* Textarea */
-textarea {
+textarea.template-output {
   width: 100%;
   height: 600px;
   padding: 1rem;
@@ -260,7 +260,29 @@ textarea {
   margin-bottom: 1rem;
 }
 
-textarea:focus {
+textarea.template-output:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+textarea.medium-text-area {
+  width: 100%;
+  height: 200px;
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  background-color: #fff;
+  color: #1f2937;
+  resize: vertical;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+textarea.medium-text-area:focus {
   outline: none;
   border-color: #2563eb;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);

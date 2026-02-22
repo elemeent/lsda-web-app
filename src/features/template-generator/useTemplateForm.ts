@@ -43,7 +43,9 @@ export function useTemplateForm<T>({
 
   // Handle input/select changes
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
   ) => {
     const { name, value } = e.target;
     const updated = { ...formData };

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useTemplateForm } from "./useTemplateForm";
-import arraignmentTemplate from "./templates/arraignment.hbs?raw";
+import { useTemplateForm } from "../useTemplateForm";
+import arraignmentTemplate from "../templates/arraignment.hbs?raw";
 import "./Arraignment.css";
 
 interface ArraignmentFormData {
@@ -225,30 +225,6 @@ function Arraignment() {
                 : false,
           },
         },
-      };
-
-      // Add ordinal suffix to day for template
-      const getOrdinalSuffix = (num: number): string => {
-        if (num === 0) return "";
-        if (num % 100 >= 11 && num % 100 <= 13) return "th";
-        switch (num % 10) {
-          case 1:
-            return "st";
-          case 2:
-            return "nd";
-          case 3:
-            return "rd";
-          default:
-            return "th";
-        }
-      };
-
-      const dayNum = parseInt(data.fillingDate.day, 10);
-      computedData.fillingDate = {
-        ...data.fillingDate,
-        day: data.fillingDate.day
-          ? `${data.fillingDate.day}${getOrdinalSuffix(dayNum)}`
-          : "",
       };
 
       return computedData;
@@ -861,7 +837,11 @@ function Arraignment() {
 
       <div className="form-section">
         <span className="form-section-title">Generated Template</span>
-        <textarea value={renderedTemplate} readOnly />
+        <textarea
+          className="template-output"
+          value={renderedTemplate}
+          readOnly
+        />
         <div className="copy-buttons-container">
           <button
             className="copy-button"

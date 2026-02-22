@@ -1,8 +1,9 @@
 import { useState } from "react";
-import Arraignment from "./Arraingment";
+import Arraignment from "./arraignment/Arraingment";
 import TemplatePicker from "./TemplatePicker";
 import "./TemplateGenerator.css";
-import PleaDeal from "./PleaDeal";
+import PleaDeal from "./plea-deal/PleaDeal";
+import Expungement from "./expungement/Expungement";
 
 function TemplateGenerator() {
   const [activeTemplate, setActiveTemplate] = useState("none");
@@ -13,6 +14,8 @@ function TemplateGenerator() {
         return <Arraignment />;
       case "plea-deal":
         return <PleaDeal />;
+      case "expungement":
+        return <Expungement />;
       default:
         return <TemplatePicker onSelectTemplate={setActiveTemplate} />;
     }

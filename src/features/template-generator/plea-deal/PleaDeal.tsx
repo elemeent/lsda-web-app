@@ -1,5 +1,5 @@
-import pleaDealTemplate from "./templates/plea-deal.hbs?raw";
-import { useTemplateForm } from "./useTemplateForm";
+import pleaDealTemplate from "../templates/plea-deal.hbs?raw";
+import { useTemplateForm } from "../useTemplateForm";
 import "./PleaDeal.css";
 
 interface PleaDealFormData {
@@ -272,7 +272,11 @@ function PleaDeal() {
 
       <div className="form-section">
         <span className="form-section-title">Generated Template</span>
-        <textarea value={renderedTemplate} readOnly />
+        <textarea
+          className="template-output"
+          value={renderedTemplate}
+          readOnly
+        />
         <div className="copy-buttons-container">
           <button
             className="copy-button"

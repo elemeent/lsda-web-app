@@ -14,11 +14,25 @@ function TemplatePicker({ onSelectTemplate }: TemplatePickerProps) {
       icon: "⚖️",
     },
     {
-      id: "plea-deal",
-      title: "Plea Deal",
+      id: "expungement",
+      title: "Expungement",
       description:
-        "Generate plea deal documents with defendant information, charges, and sentencing recommendations.",
+        "Generate expungement documents with defendant information, charges, and motion information.",
+      icon: "🧹",
+    },
+    {
+      id: "plea-deal",
+      title: "Plea Agreement",
+      description:
+        "Generate plea agreement documents with defendant information, charges, and sentencing recommendations.",
       icon: "🤝",
+    },
+    {
+      id: "nolle-prosequi",
+      title: "Motion to Dismiss",
+      description:
+        "Generate motion to dismiss documents with defendant information, charges, and motion information.",
+      icon: "🚮",
     },
   ];
 

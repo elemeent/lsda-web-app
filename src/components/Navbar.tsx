@@ -3,20 +3,17 @@ import { useState, useEffect } from "react";
 import "./Navbar.css";
 
 function Navbar() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const darkModeInitialStatus =
+    JSON.parse(localStorage.getItem("darkMode") || "false") || false;
+
+  const [isDarkMode, setIsDarkMode] = useState(darkModeInitialStatus);
 
   useEffect(() => {
-    // Check if dark mode was previously saved
-    const saved = localStorage.getItem("darkMode");
-    if (saved) {
-      const darkMode = JSON.parse(saved);
-      setIsDarkMode(darkMode);
-      document.documentElement.setAttribute(
-        "data-theme",
-        darkMode ? "dark" : "light",
-      );
-    }
-  }, []);
+    document.documentElement.setAttribute(
+      "data-theme",
+      isDarkMode ? "dark" : "light",
+    );
+  });
 
   const toggleDarkMode = () => {
     const newState = !isDarkMode;
@@ -32,11 +29,10 @@ function Navbar() {
     <>
       <nav>
         <div className="nav-content">
-          <h2>LSDA Web App</h2>
+          <Link to="/">
+            <h2>LSDA Web App</h2>
+          </Link>
           <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
             <li>
               <Link to="/template-generator">Template Generator</Link>
             </li>
