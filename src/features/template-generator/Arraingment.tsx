@@ -1,14 +1,48 @@
-import { useEffect, useState } from "react";
-import { renderTemplate } from "../../utils/TemplateEngine";
+import { useState } from "react";
+import { useTemplateForm } from "./useTemplateForm";
 import arraignmentTemplate from "./templates/arraignment.hbs?raw";
-import set from "lodash/set";
 import "./Arraignment.css";
 
-function Arraignment() {
-  const [isCopied, setIsCopied] = useState(false);
-  const [renderedTemplate, setRenderedTemplate] = useState("");
-  const [exhibitPattern, setExhibitPattern] = useState("numbers");
+interface ArraignmentFormData {
+  defendant: { name: string };
+  prosecutor: { name: string; stateBar: string; rank: string };
+  counts: { crime: string }[];
+  exhibits: { number: string; title: string }[];
+  sentencing: {
+    option: string;
+    maxStatutoryObservation: string;
+    otherObservation: string;
+  };
+  bail: {
+    option: string;
+    upholdStationhouseValue: string;
+    imposeValue: string;
+    abstainAlcohol: boolean;
+    appearCourt: boolean;
+    abstainCriminalActivity: boolean;
+    wearAnkleMonitor: boolean;
+    surrenderFirearms: boolean;
+    possessCellPhone: boolean;
+    refrainContact: boolean;
+    refrainGang: boolean;
+    imposeOther: boolean;
+    imposeOtherObservation: string;
+    felonyViolence: boolean;
+    maxSentence: boolean;
+    historyViolatingBail: boolean;
+    threatenWitness: boolean;
+    noBailConditions: boolean;
+    orderDetentionOther: boolean;
+    orderDetentionOtherObservation: string;
+  };
+  fillingDate: {
+    day: string;
+    month: string;
+    year: string;
+  };
+}
 
+function Arraignment() {
   const today = new Date();
   const initialDay = String(today.getDate()).padStart(2, "0");
   const monthNames = [
@@ -28,47 +62,12 @@ function Arraignment() {
   const initialMonth = monthNames[today.getMonth()];
   const initialYear = String(today.getFullYear());
 
-  const [formData, setFormData] = useState<{
-    defendant: { name: string };
-    prosecutor: { name: string; stateBar: string; rank: string };
-    counts: { crime: string }[];
-    exhibits: { number: string; title: string }[];
-    sentencing: {
-      option: string;
-      maxStatutoryObservation: string;
-      otherObservation: string;
-    };
-    bail: {
-      option: string;
-      upholdStationhouseValue: string;
-      imposeValue: string;
-      abstainAlcohol: boolean;
-      appearCourt: boolean;
-      abstainCriminalActivity: boolean;
-      wearAnkleMonitor: boolean;
-      surrenderFirearms: boolean;
-      possessCellPhone: boolean;
-      refrainContact: boolean;
-      refrainGang: boolean;
-      imposeOther: boolean;
-      imposeOtherObservation: string;
-      felonyViolence: boolean;
-      maxSentence: boolean;
-      historyViolatingBail: boolean;
-      threatenWitness: boolean;
-      noBailConditions: boolean;
-      orderDetentionOther: boolean;
-      orderDetentionOtherObservation: string;
-    };
-    fillingDate: {
-      day: string;
-      month: string;
-      year: string;
-    };
-  }>({
-    defendant: {
-      name: "",
-    },
+  const [exhibitPattern, setExhibitPattern] = useState<"numbers" | "letters">(
+    "numbers",
+  );
+
+  const initialData: ArraignmentFormData = {
+    defendant: { name: "" },
     prosecutor: {
       name: localStorage.getItem("prosecutorName") || "",
       stateBar: localStorage.getItem("prosecutorStateBar") || "",
@@ -108,13 +107,24 @@ function Arraignment() {
       month: initialMonth,
       year: initialYear,
     },
-  });
+  };
 
-  useEffect(() => {
-    const render = async () => {
+  const {
+    formData,
+    setFormData,
+    renderedTemplate,
+    isCopied,
+    handleChange,
+    handleNumericInput,
+    removeItem,
+    handleCopyClick,
+  } = useTemplateForm({
+    initialData,
+    template: arraignmentTemplate,
+    transformData: (data) => {
       const computedData = {
-        ...formData,
-        exhibits: formData.exhibits.map((exhibit, index) => ({
+        ...data,
+        exhibits: data.exhibits.map((exhibit, index) => ({
           ...exhibit,
           number:
             exhibitPattern === "letters"
@@ -122,100 +132,96 @@ function Arraignment() {
               : String(index + 1),
         })),
         prosecutor: {
-          ...formData.prosecutor,
-          name: formData.prosecutor.name.toUpperCase(),
+          ...data.prosecutor,
+          name: data.prosecutor.name.toUpperCase(),
         },
         sentencing: {
-          capitalPunishment: formData.sentencing.option === "capitalPunishment",
-          lifeWithoutParole: formData.sentencing.option === "lifeWithoutParole",
-          lifeWithParole: formData.sentencing.option === "lifeWithParole",
+          capitalPunishment: data.sentencing.option === "capitalPunishment",
+          lifeWithoutParole: data.sentencing.option === "lifeWithoutParole",
+          lifeWithParole: data.sentencing.option === "lifeWithParole",
           maxStatutory:
-            formData.sentencing.option === "maxStatutory"
-              ? formData.sentencing.maxStatutoryObservation || " "
+            data.sentencing.option === "maxStatutory"
+              ? data.sentencing.maxStatutoryObservation || " "
               : false,
-          timeServed: formData.sentencing.option === "timeServed",
+          timeServed: data.sentencing.option === "timeServed",
           other:
-            formData.sentencing.option === "other"
-              ? formData.sentencing.otherObservation || " "
+            data.sentencing.option === "other"
+              ? data.sentencing.otherObservation || " "
               : false,
         },
         bail: {
           upholdStationhouse: {
-            selected: formData.bail.option === "upholdStationhouse",
+            selected: data.bail.option === "upholdStationhouse",
             value:
-              formData.bail.option === "upholdStationhouse"
-                ? formData.bail.upholdStationhouseValue || "AMOUNT"
+              data.bail.option === "upholdStationhouse"
+                ? data.bail.upholdStationhouseValue || "AMOUNT"
                 : false,
           },
           imposeBail: {
-            selected: formData.bail.option === "imposeBail",
+            selected: data.bail.option === "imposeBail",
             value:
-              formData.bail.option === "imposeBail"
-                ? formData.bail.imposeValue || "AMOUNT"
+              data.bail.option === "imposeBail"
+                ? data.bail.imposeValue || "AMOUNT"
                 : false,
             abstainAlcohol:
-              formData.bail.option === "imposeBail"
-                ? formData.bail.abstainAlcohol
+              data.bail.option === "imposeBail"
+                ? data.bail.abstainAlcohol
                 : false,
             appearCourt:
-              formData.bail.option === "imposeBail"
-                ? formData.bail.appearCourt
-                : false,
+              data.bail.option === "imposeBail" ? data.bail.appearCourt : false,
             abstainCriminalActivity:
-              formData.bail.option === "imposeBail"
-                ? formData.bail.abstainCriminalActivity
+              data.bail.option === "imposeBail"
+                ? data.bail.abstainCriminalActivity
                 : false,
             wearAnkleMonitor:
-              formData.bail.option === "imposeBail"
-                ? formData.bail.wearAnkleMonitor
+              data.bail.option === "imposeBail"
+                ? data.bail.wearAnkleMonitor
                 : false,
             surrenderFirearms:
-              formData.bail.option === "imposeBail"
-                ? formData.bail.surrenderFirearms
+              data.bail.option === "imposeBail"
+                ? data.bail.surrenderFirearms
                 : false,
             possessCellPhone:
-              formData.bail.option === "imposeBail"
-                ? formData.bail.possessCellPhone
+              data.bail.option === "imposeBail"
+                ? data.bail.possessCellPhone
                 : false,
             refrainContact:
-              formData.bail.option === "imposeBail"
-                ? formData.bail.refrainContact
+              data.bail.option === "imposeBail"
+                ? data.bail.refrainContact
                 : false,
             refrainGang:
-              formData.bail.option === "imposeBail"
-                ? formData.bail.refrainGang
-                : false,
+              data.bail.option === "imposeBail" ? data.bail.refrainGang : false,
             other:
-              formData.bail.imposeOther && formData.bail.option === "imposeBail"
-                ? formData.bail.imposeOtherObservation || " "
+              data.bail.imposeOther && data.bail.option === "imposeBail"
+                ? data.bail.imposeOtherObservation || " "
                 : false,
           },
           orderDetention: {
-            selected: formData.bail.option === "orderDetention",
+            selected: data.bail.option === "orderDetention",
             felonyViolence:
-              formData.bail.option === "orderDetention"
-                ? formData.bail.felonyViolence
+              data.bail.option === "orderDetention"
+                ? data.bail.felonyViolence
                 : false,
             maxSentence:
-              formData.bail.option === "orderDetention"
-                ? formData.bail.maxSentence
+              data.bail.option === "orderDetention"
+                ? data.bail.maxSentence
                 : false,
             historyViolatingBail:
-              formData.bail.option === "orderDetention"
-                ? formData.bail.historyViolatingBail
+              data.bail.option === "orderDetention"
+                ? data.bail.historyViolatingBail
                 : false,
             threatenWitness:
-              formData.bail.option === "orderDetention"
-                ? formData.bail.threatenWitness
+              data.bail.option === "orderDetention"
+                ? data.bail.threatenWitness
                 : false,
             noBailConditions:
-              formData.bail.option === "orderDetention"
-                ? formData.bail.noBailConditions
+              data.bail.option === "orderDetention"
+                ? data.bail.noBailConditions
                 : false,
             other:
-              formData.bail.orderDetentionOther &&
-              formData.bail.option === "orderDetention"
-                ? formData.bail.orderDetentionOtherObservation || " "
+              data.bail.orderDetentionOther &&
+              data.bail.option === "orderDetention"
+                ? data.bail.orderDetentionOtherObservation || " "
                 : false,
           },
         },
@@ -237,71 +243,27 @@ function Arraignment() {
         }
       };
 
-      const dayNum = parseInt(formData.fillingDate.day, 10);
+      const dayNum = parseInt(data.fillingDate.day, 10);
       computedData.fillingDate = {
-        ...formData.fillingDate,
-        day: formData.fillingDate.day
-          ? `${formData.fillingDate.day}${getOrdinalSuffix(dayNum)}`
+        ...data.fillingDate,
+        day: data.fillingDate.day
+          ? `${data.fillingDate.day}${getOrdinalSuffix(dayNum)}`
           : "",
       };
 
-      const output = await renderTemplate(arraignmentTemplate, computedData);
+      return computedData;
+    },
+    onDataChange: (data) => {
+      localStorage.setItem("prosecutorName", data.prosecutor.name);
+      localStorage.setItem("prosecutorStateBar", data.prosecutor.stateBar);
+      localStorage.setItem("prosecutorRank", data.prosecutor.rank);
+    },
+  });
 
-      setRenderedTemplate(output);
-    };
-
-    render();
-
-    localStorage.setItem("prosecutorName", formData.prosecutor.name);
-    localStorage.setItem("prosecutorStateBar", formData.prosecutor.stateBar);
-    localStorage.setItem("prosecutorRank", formData.prosecutor.rank);
-  }, [formData, exhibitPattern]);
-
-  const handleChange = async (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-
-    const updated = { ...formData };
-
-    if (e.target instanceof HTMLInputElement && e.target.type === "checkbox") {
-      set(updated, name, e.target.checked);
-    } else {
-      set(updated, name, value);
-    }
-
-    setFormData(updated);
-  };
-
-  const handleNumericInput = (
+  const handleExhibitPatternChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: string,
-    maxValue?: number,
-    minValue?: number,
   ) => {
-    const { value } = e.target;
-
-    // Allow only numeric characters
-    const numericValue = value.replace(/[^0-9]/g, "");
-
-    // Apply range validation if specified
-    let finalValue = numericValue;
-    if (numericValue && maxValue !== undefined) {
-      const numVal = parseInt(numericValue, 10);
-      if (numVal > maxValue) {
-        finalValue = String(maxValue);
-      }
-    }
-    if (numericValue && minValue !== undefined) {
-      const numVal = parseInt(numericValue, 10);
-      if (numVal < minValue) {
-        finalValue = "";
-      }
-    }
-
-    const updated = { ...formData };
-    set(updated, fieldName, finalValue);
-    setFormData(updated);
+    setExhibitPattern(e.target.value as "numbers" | "letters");
   };
 
   const addCrime = () => {
@@ -319,45 +281,11 @@ function Arraignment() {
   };
 
   const removeCrime = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      counts: prev.counts.filter((_, i) => i !== index),
-    }));
+    removeItem("counts", index);
   };
 
   const removeExhibit = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      exhibits: prev.exhibits.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleExhibitPatternChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setExhibitPattern(e.target.value);
-  };
-
-  const handleCopyClick = (type: string) => {
-    const textToCopy = renderedTemplate;
-
-    const showCopiedMessage = () => {
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    };
-
-    const copyPromise =
-      type === "richtext"
-        ? navigator.clipboard.write([
-            new ClipboardItem({
-              "text/html": new Blob([textToCopy], { type: "text/html" }),
-            }),
-          ])
-        : navigator.clipboard.writeText(textToCopy);
-
-    copyPromise.then(showCopiedMessage).catch((err) => {
-      console.error("Failed to copy text: ", err);
-    });
+    removeItem("exhibits", index);
   };
 
   return (

@@ -1,85 +1,66 @@
-import { useEffect, useState } from "react";
-import { renderTemplate } from "../../utils/TemplateEngine";
 import pleaDealTemplate from "./templates/plea-deal.hbs?raw";
-import set from "lodash/set";
+import { useTemplateForm } from "./useTemplateForm";
 import "./PleaDeal.css";
 
-function PleaDeal() {
-  const [isCopied, setIsCopied] = useState(false);
-  const [renderedTemplate, setRenderedTemplate] = useState("");
+interface PleaDealFormData {
+  defendant: { name: string };
+  prosecutor: { name: string; stateBar: string; rank: string };
+  defenseAttorney: { name: string };
+  guiltyCharges: string[];
+  dismissedCharges: string[];
+  sentencingRecommendations: string[];
+  hasCounsel: boolean;
+}
 
-  const [formData, setFormData] = useState<{
-    defendant: { name: string };
-    prosecutor: { name: string; stateBar: string; rank: string };
-    defenseAttorney: { name: string };
-    guiltyCharges: string[];
-    dismissedCharges: string[];
-    sentencingRecommendations: string[];
-    hasCounsel: boolean;
-  }>({
-    defendant: {
-      name: "",
-    },
+function PleaDeal() {
+  const initialData: PleaDealFormData = {
+    defendant: { name: "" },
     prosecutor: {
       name: localStorage.getItem("prosecutorName") || "",
       stateBar: localStorage.getItem("prosecutorStateBar") || "",
       rank: localStorage.getItem("prosecutorRank") || "",
     },
-    defenseAttorney: {
-      name: "",
-    },
+    defenseAttorney: { name: "" },
     guiltyCharges: [""],
     dismissedCharges: [],
     sentencingRecommendations: [""],
     hasCounsel: true,
-  });
-
-  useEffect(() => {
-    const render = async () => {
-      const computedData = {
-        ...formData,
-        prosecutor: {
-          ...formData.prosecutor,
-          name: formData.prosecutor.name.toUpperCase(),
-        },
-        defendant: {
-          ...formData.defendant,
-          name: formData.defendant.name.toUpperCase(),
-        },
-        defenseAttorney: {
-          ...formData.defenseAttorney,
-          name: formData.defenseAttorney.name.toUpperCase(),
-        },
-      };
-
-      const output = await renderTemplate(pleaDealTemplate, computedData);
-
-      setRenderedTemplate(output);
-    };
-
-    render();
-
-    localStorage.setItem("prosecutorName", formData.prosecutor.name);
-    localStorage.setItem("prosecutorStateBar", formData.prosecutor.stateBar);
-    localStorage.setItem("prosecutorRank", formData.prosecutor.rank);
-  }, [formData]);
-
-  const handleChange = async (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = e.target;
-
-    const updated = { ...formData };
-
-    if (e.target instanceof HTMLInputElement && e.target.type === "checkbox") {
-      set(updated, name, e.target.checked);
-    } else {
-      set(updated, name, value);
-    }
-
-    setFormData(updated);
   };
 
+  const {
+    formData,
+    setFormData,
+    renderedTemplate,
+    isCopied,
+    handleChange,
+    removeItem,
+    handleCopyClick,
+  } = useTemplateForm({
+    initialData,
+    template: pleaDealTemplate,
+    transformData: (data) => ({
+      ...data,
+      prosecutor: {
+        ...data.prosecutor,
+        name: data.prosecutor.name.toUpperCase(),
+      },
+      defendant: {
+        ...data.defendant,
+        name: data.defendant.name.toUpperCase(),
+      },
+      defenseAttorney: {
+        ...data.defenseAttorney,
+        name: data.defenseAttorney.name.toUpperCase(),
+      },
+    }),
+    onDataChange: (data) => {
+      localStorage.setItem("prosecutorName", data.prosecutor.name);
+      localStorage.setItem("prosecutorStateBar", data.prosecutor.stateBar);
+      localStorage.setItem("prosecutorRank", data.prosecutor.rank);
+    },
+  });
+
+  // Semantic wrapper functions for clarity
   const addGuiltyCharge = () => {
     setFormData((prev) => ({
       ...prev,
@@ -102,48 +83,15 @@ function PleaDeal() {
   };
 
   const removeGuiltyCharge = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      guiltyCharges: prev.guiltyCharges.filter((_, i) => i !== index),
-    }));
+    removeItem("guiltyCharges", index);
   };
 
   const removeDismissedCharge = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      dismissedCharges: prev.dismissedCharges.filter((_, i) => i !== index),
-    }));
+    removeItem("dismissedCharges", index);
   };
 
   const removeSentencingRecommendation = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      sentencingRecommendations: prev.sentencingRecommendations.filter(
-        (_, i) => i !== index,
-      ),
-    }));
-  };
-
-  const handleCopyClick = (type: string) => {
-    const textToCopy = renderedTemplate;
-
-    const showCopiedMessage = () => {
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
-    };
-
-    const copyPromise =
-      type === "richtext"
-        ? navigator.clipboard.write([
-            new ClipboardItem({
-              "text/html": new Blob([textToCopy], { type: "text/html" }),
-            }),
-          ])
-        : navigator.clipboard.writeText(textToCopy);
-
-    copyPromise.then(showCopiedMessage).catch((err) => {
-      console.error("Failed to copy text: ", err);
-    });
+    removeItem("sentencingRecommendations", index);
   };
 
   return (
