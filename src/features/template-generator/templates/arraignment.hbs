@@ -1,0 +1,291 @@
+<table align="center" border="0" cellpadding="3" cellspacing="2" style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; color:#353c41; font-size:14px; text-align:start">
+	<tbody>
+		<tr>
+			<td>
+				<table align="center" border="0" cellpadding="3" cellspacing="2" style="border-collapse:collapse; border-spacing:0px; color:#353c41; font-size:14px">
+					<tbody>
+						<tr>
+							<td style="text-align:right">
+								<table align="center" border="0" cellpadding="3" cellspacing="2" style="border-collapse:collapse; border-spacing:0px; color:#353c41; font-size:14px">
+									<tbody>
+										<tr>
+											<td>
+												<p style="text-align:center">
+													<span><strong><span style="font-size:28px">SUPERIOR&nbsp;COURT OF THE STATE OF SAN ANDREAS</span></strong></span>
+												</p>
+
+												<p style="text-align:center">
+													<span><strong><span style="font-size:28px">COUNTY OF LOS SANTOS</span></strong></span>
+												</p>
+
+												<p style="text-align:center">
+													<span><span style="font-size:28px">CRIMINAL DIVISION</span></span>
+												</p>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<span><span style="text-align:left">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;</span></span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+			<td>
+				<span><a href="https://i.ibb.co/zQMVtSr/150x150court.png" rel="external nofollow" style="background-color:transparent; color:#ffffff" target="_blank" title="Enlarge image"><img alt="150x150court.png" data-ratio="100.00" src="https://i.ibb.co/zQMVtSr/150x150court.png" style="border-style:none; vertical-align:middle" width="150"></a></span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<hr style="background-color:rgba(0, 0, 0, 0.5); color:#cbcbcb; font-size:13px; text-align:start">
+<p style="font-size:14px; text-align:center">
+	<span><span style="font-size:22px"><strong>People of the State of San Andreas v. {{defendant.name}}</strong></span></span>
+</p>
+
+<p style="font-size:14px; text-align:center">
+	&nbsp;
+</p>
+
+<p style="font-size:14px; text-align:justify">
+	<span><span style="font-size:16px">The undersigned, on information and belief, accuses defendant&nbsp;<strong>{{defendant.name}}&nbsp;</strong>of the following crimes:</span></span><br>
+	&nbsp;
+</p>
+
+{{#each counts}}
+<p style="font-size:13px; text-align:center">
+	<span><span style="font-size:16px"><strong><u>COUNT {{math @index "+" 1}}</u></strong></span></span>
+</p>
+
+<ul style="color:#cbcbcb; font-size:13px; text-align:start">
+	<li style="font-size:13px">
+		<span style="font-size:14px;"><strong>{{crime}}</strong></span>
+	</li>
+</ul>
+{{/each}}
+
+<p style="font-size:14px; text-align:justify">
+	&nbsp;
+</p>
+
+<ul style="background-color:rgba(0, 0, 0, 0.5); color:#cbcbcb; font-size:13px; text-align:start">
+</ul>
+
+<p style="font-size:13px; text-align:center">
+	<span><span style="font-size:20px"><b>Evidence</b></span></span>
+</p>
+
+<p style="font-size:13px; text-align:justify">
+	&nbsp;
+</p>
+
+<p style="font-size:13px; text-align:justify">
+	<span><span style="font-size:16px">In support of the foregoing narrative, the following evidence shall be submitted into the court record:</span></span>
+</p>
+
+<p style="font-size:13px; text-align:justify">
+	&nbsp;
+</p>
+
+{{#each exhibits}}
+<p style="font-size:13px; text-align:start">
+	<span><strong><span style="font-size:16px">Exhibit {{number}} ({{title}}):</span></strong></span>
+</p>
+
+<div class="ipsSpoiler" data-ipsspoiler="">
+	<div class="ipsSpoiler_header">
+		<span>Spoiler</span>
+	</div>
+
+	<div class="ipsSpoiler_contents ipsClearfix" data-gramm="false">
+		INSERT EXHIBIT CONTENT HERE
+	</div>
+</div>
+<p style="font-size:13px; text-align:start">
+	&nbsp;
+</p>
+{{/each}}
+
+<hr style="background-color:rgba(0, 0, 0, 0.5); color:#cbcbcb; font-size:13px; text-align:start">
+<p style="font-size:13px; text-align:center">
+	<span><span style="font-size:20px"><b>Sentencing</b></span></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	<br>
+	<span><span style="font-size:16px">Upon motion by the People of the State of San Andreas, it is hereby demanded that, upon sentencing, the following punishments be imposed:</span></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:16px">[{{checkbox sentencing.capitalPunishment}}] - Capital Punishment</span></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:16px">[{{checkbox sentencing.lifeWithoutParole}}] - Life imprisonment without parole</span></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:16px">[{{checkbox sentencing.lifeWithParole}}] - Life imprisonment with parole</span></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:16px">[{{checkbox sentencing.maxStatutory}}] - Maximum statutory sentencing recommendation{{#if sentencing.maxStatutory}} - <em>{{sentencing.maxStatutory}}</em>{{/if}}</span></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:16px">[{{checkbox sentencing.timeServed}}] - Time served</span></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:16px">[{{checkbox sentencing.other}}] - Other: {{#if sentencing.other}}<u>{{sentencing.other}}</u>{{else}}_____________________{{/if}}</span></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="font-size:13px; text-align:start">
+	<span style="font-size:14px">(( Note: 1 Hour = 1 Day, 1 Day = 1 Month, 1 Month = 1 Year. ))&nbsp;</span>
+</p>
+
+<hr style="background-color:rgba(0, 0, 0, 0.5); color:#cbcbcb; font-size:13px; text-align:start">
+<p style="font-size:13px; text-align:center">
+	<span><b><span style="font-size:20px">Bail Recommendations</span></b></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	<br>
+	<span><span style="font-size:16px">Upon motion by the People of the State of San Andreas, it is hereby recommended that the Court impose or otherwise uphold the following bail recommendations:</span></span>
+</p>
+
+<p style="font-size:13px; text-align:start">
+	&nbsp;
+</p>
+
+
+{{#unless bail.upholdStationhouse.selected}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span>[{{checkbox bail.upholdStationhouse.selected}}] - Uphold Stationhouse Bail &mdash;<span>&nbsp;</span><u><strong>{{#if bail.upholdStationhouse.value}}<u>${{bail.upholdStationhouse.value}}</u>{{else}}$AMOUNT{{/if}}</strong>;</u><span>&nbsp;</span>or,</span>
+</p>{{#unless bail.upholdStationhouse.selected}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.selected}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span>[{{checkbox bail.imposeBail.selected}}] - Impose Bail &mdash;<span>&nbsp;</span><u><strong>{{#if bail.imposeBail.value}}<u>${{bail.imposeBail.value}}</u>{{else}}$AMOUNT{{/if}}</strong></u>.</span>
+</p>{{#unless bail.imposeBail.selected}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.abstainAlcohol}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.imposeBail.abstainAlcohol}}] - Abstain from excessive use of alcohol and any use of a controlled substance without a prescription.</span></span>
+</p>{{#unless bail.imposeBail.abstainAlcohol}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.appearCourt}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.imposeBail.appearCourt}}] - Appear before the court on each date the case is assigned to call.</span></span>
+</p>{{#unless bail.imposeBail.appearCourt}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.abstainCriminalActivity}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.imposeBail.abstainCriminalActivity}}] - Abstain from criminal activity while subject to the bail order.</span></span>
+</p>{{#unless bail.imposeBail.abstainCriminalActivity}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.wearAnkleMonitor}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.imposeBail.wearAnkleMonitor}}] - Wear an ankle monitor at all times.</span></span>
+</p>{{#unless bail.imposeBail.wearAnkleMonitor}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.surrenderFirearms}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.imposeBail.surrenderFirearms}}] - Surrender any illegal or legally owned firearms to the respective agency.</span></span>
+</p>{{#unless bail.imposeBail.surrenderFirearms}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.possessCellPhone}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.imposeBail.possessCellPhone}}] - Possess and keep on at all times an active cell phone with its number registered to Defendant.</span></span>
+</p>{{#unless bail.imposeBail.possessCellPhone}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.refrainContact}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.imposeBail.refrainContact}}] - Refrain from contact with any victim/witness relating to this arrest.</span></span>
+</p>{{#unless bail.imposeBail.refrainContact}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.refrainGang}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.imposeBail.refrainGang}}] - Refrain from associating with known gang members or violent felons.</span></span>
+</p>{{#unless bail.imposeBail.refrainGang}}</s>{{/unless}}
+
+{{#unless bail.imposeBail.other}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.imposeBail.other}}] - Other: {{#if bail.imposeBail.other}}<u>{{bail.imposeBail.other}}</u>{{else}}_____________________{{/if}}</span></span>
+</p>{{#unless bail.imposeBail.other}}</s>{{/unless}}
+
+{{#unless bail.orderDetention.selected}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span>[{{checkbox bail.orderDetention.selected}}] - Order Defendant&#39;s Detention.</span>
+</p>{{#unless bail.orderDetention.selected}}</s>{{/unless}}
+
+{{#unless bail.orderDetention.felonyViolence}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.orderDetention.felonyViolence}}] - The defendant is charged with a felony crime of violence and has over 30 criminal points on record.</span></span>
+</p>{{#unless bail.orderDetention.felonyViolence}}</s>{{/unless}}
+
+{{#unless bail.orderDetention.maxSentence}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.orderDetention.maxSentence}}] - The defendant is charged with an offense for which the maximum sentence is life imprisonment or death.</span></span>
+</p>{{#unless bail.orderDetention.maxSentence}}</s>{{/unless}}
+
+{{#unless bail.orderDetention.historyViolatingBail}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.orderDetention.historyViolatingBail}}] - The defendant has a history of violating bail conditions.</span></span>
+</p>{{#unless bail.orderDetention.historyViolatingBail}}</s>{{/unless}}
+
+{{#unless bail.orderDetention.threatenWitness}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.orderDetention.threatenWitness}}] - There exists a serious risk that the defendant will threaten, injure, or intimidate a prospective witness.</span></span>
+</p>{{#unless bail.orderDetention.threatenWitness}}</s>{{/unless}}
+
+{{#unless bail.orderDetention.noBailConditions}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.orderDetention.noBailConditions}}] - The People believe that no condition or combination of conditions will reasonably assure the defendant&#39;s appearance as required and the safety of any person or the community.</span></span>
+</p>{{#unless bail.orderDetention.noBailConditions}}</s>{{/unless}}
+
+{{#unless bail.orderDetention.other}}<s>{{/unless}}<p style="font-size:13px; text-align:start">
+	<span><span style="font-size:12px">&nbsp; &nbsp; [{{checkbox bail.orderDetention.other}}] - Other: {{#if bail.orderDetention.other}}<u>{{bail.orderDetention.other}}</u>{{else}}_____________________{{/if}}</span></span>
+</p>{{#unless bail.orderDetention.other}}</s>{{/unless}}
+
+<p style="font-size:13px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="font-size:13px; text-align:start">
+	&nbsp;
+</p>
+
+<hr style="background-color:rgba(0, 0, 0, 0.5); color:#cbcbcb; font-size:13px; text-align:start">
+<p style="font-size:13px; text-align:center">
+	<span><span style="font-size:20px"><b>Verification</b></span></span>
+</p>
+
+<p style="font-size:13px; text-align:center">
+	&nbsp;
+</p>
+
+<p style="font-size:13px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="font-size:13px; text-align:justify">
+	<span>I, the undersigned, hereby declare under penalty of perjury under the laws of the State of San Andreas that the foregoing is true and correct to the best of my knowledge. Signed on the<span>&nbsp;</span><u>{{fillingDate.day}}</u><span>&nbsp;</span>day of<span>&nbsp;</span><u>{{fillingDate.month}}</u>, {{fillingDate.year}}.</span><br>
+	&nbsp;
+</p>
+
+<p style="font-size:14px; text-align:right">
+	<span><u><span style="font-size:16px"><em>/s/&nbsp;</em>{{prosecutor.name}}</span></u></span>
+</p>
+
+<p style="font-size:14px; text-align:right">
+	<span style="font-size:16px;">{{prosecutor.name}}</span>
+</p>
+
+<p style="font-size:13px; text-align:right">
+	<span><span style="font-size:16px">San Andreas State Bar No. {{prosecutor.stateBar}}</span></span>
+</p>
+
+<p style="font-size:13px; text-align:right">
+	<span><span style="font-size:16px">{{prosecutor.rank}}</span></span>
+</p>
+
+<p style="font-size:13px; text-align:right">
+	<span><span style="font-size:16px">Los Santos County District Attorney&#39;s Office</span></span>
+</p>
+
+<p>
+	<br>
+	(( Tag Defendant Here ))
+</p>

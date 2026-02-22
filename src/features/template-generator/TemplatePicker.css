@@ -1,0 +1,93 @@
+.template-picker {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.template-picker-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.template-picker-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.template-picker-header p {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.template-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.template-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  padding: 2rem;
+}
+
+.template-card:hover {
+  border-color: #2563eb;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+  transform: translateY(-4px);
+  background-color: white;
+}
+
+.template-card-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.template-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+}
+
+.template-card-description {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 0;
+  flex-grow: 1;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .template-picker {
+    padding: 2rem 1rem;
+  }
+
+  .template-picker-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .template-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .template-card {
+    padding: 1.5rem;
+  }
+}

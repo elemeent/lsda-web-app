@@ -1,0 +1,272 @@
+.arraignment-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+/* Form Section Styling */
+.form-section {
+  margin-bottom: 2.5rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  border-left: 4px solid #2563eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.form-section-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1.25rem;
+  display: block;
+}
+
+/* Form Group */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* Labels */
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+label input[type="checkbox"],
+label input[type="radio"] {
+  margin-right: 0.5rem;
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb;
+}
+
+label input[type="checkbox"] + *,
+label input[type="radio"] + * {
+  display: inline;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  background-color: #fff;
+}
+
+input[type="text"]:hover,
+input[type="number"]:hover,
+select:hover {
+  border-color: #9ca3af;
+}
+
+/* Checkbox and Radio Labels */
+.checkbox-label,
+.radio-label {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.875rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"],
+.radio-label input[type="radio"] {
+  margin-right: 0.625rem;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.checkbox-label + .checkbox-label {
+  margin-top: 0.75rem;
+}
+
+.radio-label + .radio-label {
+  margin-top: 0.75rem;
+}
+
+/* Button Styling */
+button {
+  padding: 0.625rem 1.25rem;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 0.625rem;
+  margin-top: 1rem;
+}
+
+button:hover {
+  background-color: #1d4ed8;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+}
+
+button:active {
+  background-color: #1e40af;
+  transform: scale(0.98);
+}
+
+button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.copy-buttons-container {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+button.copy-button {
+  background-color: #059669;
+  flex: 1;
+  margin: 0;
+}
+
+button.copy-button:hover {
+  background-color: #047857;
+  box-shadow: 0 4px 6px rgba(5, 150, 105, 0.25);
+}
+
+button.copy-button.copied {
+  background-color: #10b981;
+}
+
+/* Array Items (Crimes and Exhibits) */
+.array-item {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.875rem;
+}
+
+.array-item input {
+  flex: 1;
+  min-width: 0;
+}
+
+.array-item-index {
+  min-width: 2rem;
+  padding: 0.625rem 0.875rem;
+  background-color: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+/* Option Groups */
+.option-group {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+}
+
+.option-group-title {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.option-input {
+  margin-top: 0.75rem;
+  margin-left: 1.75rem;
+}
+
+/* Textarea */
+textarea {
+  width: 100%;
+  height: 600px;
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", "Courier New", monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  background-color: #fff;
+  color: #1f2937;
+  resize: vertical;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .arraignment-container {
+    padding: 1rem;
+  }
+
+  .form-section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  select {
+    font-size: 16px; /* Prevents zoom on mobile */
+  }
+
+  button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Utility Classes */
+.hidden {
+  display: none;
+}
+
+.text-muted {
+  color: #9ca3af;
+}
+
+.text-small {
+  font-size: 0.85rem;
+}
