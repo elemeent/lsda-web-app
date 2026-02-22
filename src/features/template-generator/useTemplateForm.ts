@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import { renderTemplate } from "../../utils/TemplateEngine";
 import set from "lodash/set";
 
-interface UseTemplateFormOptions<T> {
+interface UseTemplateFormOptions<T, U = T> {
   initialData: T;
   template: string;
-  transformData?: (data: T) => T;
+  transformData?: (data: T) => U;
   onDataChange?: (data: T) => void;
 }
 
-export function useTemplateForm<T>({
+export function useTemplateForm<T, U = T>({
   initialData,
   template,
   transformData,
   onDataChange,
-}: UseTemplateFormOptions<T>) {
+}: UseTemplateFormOptions<T, U>) {
   const [isCopied, setIsCopied] = useState(false);
   const [renderedTemplate, setRenderedTemplate] = useState("");
   const [formData, setFormData] = useState<T>(initialData);
@@ -22,11 +22,11 @@ export function useTemplateForm<T>({
   // Render template whenever form data changes
   useEffect(() => {
     const render = async () => {
-      let computedData = { ...formData };
+      let computedData: any = { ...formData } as any;
 
       // Apply custom transformation if provided
       if (transformData) {
-        computedData = transformData(computedData);
+        computedData = transformData(formData);
       }
 
       const output = await renderTemplate(template, computedData);
@@ -91,26 +91,23 @@ export function useTemplateForm<T>({
   // Add item to array at specified path
   const addItem = (arrayPath: string, newItem: any) => {
     setFormData((prev) => {
-      const updated = { ...prev };
-      const arr = set(updated, arrayPath, [
-        ...(get(prev, arrayPath) as any[]),
-        newItem,
-      ]);
-      return arr;
+      const updated = { ...prev } as any;
+      set(updated, arrayPath, [...(get(prev, arrayPath) as any[]), newItem]);
+      return updated as T;
     });
   };
 
   // Remove item from array at specified path
   const removeItem = (arrayPath: string, index: number) => {
     setFormData((prev) => {
-      const updated = { ...prev };
+      const updated = { ...prev } as any;
       const arr = get(prev, arrayPath) as any[];
       set(
         updated,
         arrayPath,
         arr.filter((_, i) => i !== index),
       );
-      return updated;
+      return updated as T;
     });
   };
 
