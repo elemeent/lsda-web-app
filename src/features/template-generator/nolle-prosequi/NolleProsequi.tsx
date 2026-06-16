@@ -86,13 +86,6 @@ function NolleProsequi() {
   } = useTemplateForm({
     initialData,
     template: nolleProsequiTemplate,
-    transformData: (data) => ({
-      ...data,
-      prosecutor: {
-        ...data.prosecutor,
-        name: data.prosecutor.name.toUpperCase(),
-      },
-    }),
     onDataChange: (data) => {
       localStorage.setItem("prosecutorName", data.prosecutor.name);
       localStorage.setItem("prosecutorStateBar", data.prosecutor.stateBar);

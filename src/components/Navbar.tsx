@@ -36,6 +36,9 @@ function Navbar() {
             <li>
               <Link to="/template-generator">Template Generator</Link>
             </li>
+            <li>
+              <a href="https://elemeent.github.io/dao-bail-schedule" target="_blank" rel="noopener noreferrer">Bail Schedule</a>
+            </li>
           </ul>
         </div>
         <button
