@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { renderTemplate } from "../../utils/TemplateEngine";
 import set from "lodash/set";
 
-interface UseTemplateFormOptions<T, U = T> {
+interface UseTemplateFormOptions<T extends object, U = T> {
   initialData: T;
   template: string;
   transformData?: (data: T) => U;
   onDataChange?: (data: T) => void;
 }
 
-export function useTemplateForm<T, U = T>({
+export function useTemplateForm<T extends object, U = T>({
   initialData,
   template,
   transformData,
