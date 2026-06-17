@@ -79,7 +79,6 @@ function Appearance() {
 
   const {
     formData,
-    setFormData,
     renderedTemplate,
     isCopied,
     handleChange,

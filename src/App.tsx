@@ -11,6 +11,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/template-generator" element={<TemplateGenerator />} />
       </Routes>
+      <footer className="py-6 text-center font-mono text-[0.65rem] tracking-widest text-navy-700 select-none">
+        made with <span className="text-red-500">♥</span> by element
+      </footer>
     </Router>
   );
 }
