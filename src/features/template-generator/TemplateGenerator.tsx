@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Arraignment from "./arraignment/Arraignment";
 import TemplatePicker from "./TemplatePicker";
 import PleaDeal from "./plea-deal/PleaDeal";
@@ -16,8 +17,24 @@ const TEMPLATE_LABELS: Record<string, string> = {
   appearance: "Notice of Appearance",
 };
 
+const VALID_TEMPLATES = Object.keys(TEMPLATE_LABELS);
+
 function TemplateGenerator() {
-  const [activeTemplate, setActiveTemplate] = useState("none");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const paramTemplate = searchParams.get("template") ?? "";
+
+  const [activeTemplate, setActiveTemplate] = useState<string>(
+    () => (VALID_TEMPLATES.includes(paramTemplate) ? paramTemplate : "none")
+  );
+
+  const selectTemplate = (id: string) => {
+    setActiveTemplate(id);
+    if (id === "none") {
+      setSearchParams({}, { replace: true });
+    } else {
+      setSearchParams({ template: id }, { replace: true });
+    }
+  };
 
   const renderContent = () => {
     switch (activeTemplate) {
@@ -27,7 +44,7 @@ function TemplateGenerator() {
       case "nolle-prosequi":  return <NolleProsequi />;
       case "motion":          return <Motion />;
       case "appearance":      return <Appearance />;
-      default:                return <TemplatePicker onSelectTemplate={setActiveTemplate} />;
+      default:                return <TemplatePicker onSelectTemplate={selectTemplate} />;
     }
   };
 
@@ -37,7 +54,7 @@ function TemplateGenerator() {
         <div className="sticky top-14 z-40 border-b border-navy-800/60 bg-navy-950/80 backdrop-blur-md">
           <div className="mx-auto flex h-11 max-w-5xl items-center gap-3 px-5">
             <button
-              onClick={() => setActiveTemplate("none")}
+              onClick={() => selectTemplate("none")}
               className="flex items-center gap-1.5 rounded-md px-2 py-1 font-mono text-xs text-slate-500 transition-colors hover:text-slate-300"
             >
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

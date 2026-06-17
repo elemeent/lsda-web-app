@@ -2,6 +2,8 @@ import { useState } from "react";
 import daoMotionTemplate from "../templates/dao-motion.hbs?raw";
 import ogMotionTemplate from "../templates/og-motion.hbs?raw";
 import { useTemplateForm } from "../useTemplateForm";
+import { useAttorney } from "../../../context/AttorneyContext";
+import OutputSection from "../OutputSection";
 import "./Motion.css";
 
 interface MotionFormData {
@@ -36,7 +38,12 @@ const monthNames = [
   "July", "August", "September", "October", "November", "December",
 ];
 
+function formatDraftTime(iso: string) {
+  return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
 function Motion() {
+  const { profiles } = useAttorney();
   const today = new Date();
   const initialDay = String(today.getDate()).padStart(2, "0");
   const initialMonth = monthNames[today.getMonth()];
@@ -96,7 +103,10 @@ function Motion() {
     formData,
     setFormData,
     renderedTemplate,
-    isCopied,
+    copiedKey,
+    draftBanner,
+    restoreDraft,
+    dismissDraft,
     handleChange,
     handleNumericInput,
     addItem,
@@ -106,6 +116,7 @@ function Motion() {
     initialData,
     template,
     transformData,
+    draftKey: "draft_motion",
     onDataChange: (data) => {
       localStorage.setItem("motionCaseType", data.caseType);
       localStorage.setItem("motionCaseNumber", data.caseNumber);
@@ -120,6 +131,24 @@ function Motion() {
       localStorage.setItem("motionAttorneyRole", data.undersigned.role);
     },
   });
+
+  const fillFromCharacter = (id: string) => {
+    const p = profiles.find((x) => x.id === id);
+    if (!p) return;
+    setFormData((prev) => ({
+      ...prev,
+      undersigned: {
+        ...prev.undersigned,
+        name: p.name,
+        stateBar: p.stateBar,
+        showFirm: p.showFirm,
+        firm: p.firm,
+        showAddress: p.showAddress,
+        address: p.address,
+        role: p.role,
+      },
+    }));
+  };
 
   const addDefendant = () => addItem("defendants", { name: "" });
   const removeDefendant = (i: number) => removeItem("defendants", i);
@@ -137,6 +166,16 @@ function Motion() {
 
   return (
     <div className="tpl-page">
+
+      {draftBanner && (
+        <div className="tpl-draft-banner">
+          <span>Unsaved draft from {formatDraftTime(draftBanner.savedAt)} — restore?</span>
+          <div className="tpl-draft-banner-actions">
+            <button className="tpl-draft-btn-restore" onClick={restoreDraft}>Restore</button>
+            <button className="tpl-draft-btn-dismiss" onClick={dismissDraft}>Dismiss</button>
+          </div>
+        </div>
+      )}
 
       {/* Case Info */}
       <div className="tpl-section">
@@ -308,6 +347,22 @@ function Motion() {
       <div className="tpl-section">
         <span className="tpl-section-title">Undersigned Attorney</span>
 
+        {profiles.length > 0 && (
+          <div className="tpl-fill-row">
+            <span className="tpl-fill-label">Fill from character →</span>
+            <select
+              className="tpl-fill-select"
+              value=""
+              onChange={(e) => fillFromCharacter(e.target.value)}
+            >
+              <option value="" disabled>— select character —</option>
+              {profiles.map((p) => (
+                <option key={p.id} value={p.id}>{p.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <div className="tpl-group">
           <label className="tpl-label">Full Name</label>
           <input className="tpl-input" type="text" name="undersigned.name" value={formData.undersigned.name} onChange={handleChange} placeholder="e.g. RODRIGO VERAS" />
@@ -340,19 +395,12 @@ function Motion() {
         </div>
       </div>
 
-      {/* Output */}
-      <div className="tpl-section">
-        <span className="tpl-section-title">Generated Template</span>
-        <textarea className="tpl-output" value={renderedTemplate} readOnly />
-        <div className="tpl-copy-row">
-          <button className={`tpl-btn-copy${isCopied ? " copied" : ""}`} onClick={handleCopyClick.bind(null, "richtext")}>
-            {isCopied ? "✓ Copied!" : "Copy Rich Text"}
-          </button>
-          <button className={`tpl-btn-copy${isCopied ? " copied" : ""}`} onClick={handleCopyClick.bind(null, "source")}>
-            {isCopied ? "✓ Copied!" : "Copy Source HTML"}
-          </button>
-        </div>
-      </div>
+      <OutputSection
+        renderedTemplate={renderedTemplate}
+        copiedKey={copiedKey}
+        onCopy={handleCopyClick}
+        onPrint={() => window.print()}
+      />
 
     </div>
   );

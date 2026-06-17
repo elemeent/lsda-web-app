@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useTemplateForm } from "../useTemplateForm";
+import { useAttorney } from "../../../context/AttorneyContext";
 import arraignmentTemplate from "../templates/arraignment.hbs?raw";
+import OutputSection from "../OutputSection";
 import "./Arraignment.css";
 
 interface ArraignmentFormData {
@@ -42,7 +44,12 @@ interface ArraignmentFormData {
   };
 }
 
+function formatDraftTime(iso: string) {
+  return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
 function Arraignment() {
+  const { profiles } = useAttorney();
   const today = new Date();
   const initialDay = String(today.getDate()).padStart(2, "0");
   const monthNames = [
@@ -93,7 +100,10 @@ function Arraignment() {
     formData,
     setFormData,
     renderedTemplate,
-    isCopied,
+    copiedKey,
+    draftBanner,
+    restoreDraft,
+    dismissDraft,
     handleChange,
     handleNumericInput,
     removeItem,
@@ -101,6 +111,7 @@ function Arraignment() {
   } = useTemplateForm({
     initialData,
     template: arraignmentTemplate,
+    draftKey: "draft_arraignment",
     transformData: (data) => {
       const computedData = {
         ...data,
@@ -176,6 +187,15 @@ function Arraignment() {
     },
   });
 
+  const fillFromCharacter = (id: string) => {
+    const p = profiles.find((x) => x.id === id);
+    if (!p) return;
+    setFormData((prev) => ({
+      ...prev,
+      prosecutor: { ...prev.prosecutor, name: p.name, stateBar: p.stateBar, rank: p.role },
+    }));
+  };
+
   const handleExhibitPatternChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setExhibitPattern(e.target.value as "numbers" | "letters");
   };
@@ -194,6 +214,16 @@ function Arraignment() {
   return (
     <div className="tpl-page">
 
+      {draftBanner && (
+        <div className="tpl-draft-banner">
+          <span>Unsaved draft from {formatDraftTime(draftBanner.savedAt)} — restore?</span>
+          <div className="tpl-draft-banner-actions">
+            <button className="tpl-draft-btn-restore" onClick={restoreDraft}>Restore</button>
+            <button className="tpl-draft-btn-dismiss" onClick={dismissDraft}>Dismiss</button>
+          </div>
+        </div>
+      )}
+
       <div className="tpl-section">
         <span className="tpl-section-title">Defendant &amp; Prosecutor Information</span>
 
@@ -201,6 +231,23 @@ function Arraignment() {
           <label className="tpl-label">Defendant Name</label>
           <input className="tpl-input" type="text" name="defendant.name" value={formData.defendant.name} onChange={handleChange} />
         </div>
+
+        {profiles.length > 0 && (
+          <div className="tpl-fill-row">
+            <span className="tpl-fill-label">Fill prosecutor from character →</span>
+            <select
+              className="tpl-fill-select"
+              value=""
+              onChange={(e) => fillFromCharacter(e.target.value)}
+            >
+              <option value="" disabled>— select character —</option>
+              {profiles.map((p) => (
+                <option key={p.id} value={p.id}>{p.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <div className="tpl-group">
           <label className="tpl-label">Prosecutor Name</label>
           <input className="tpl-input" type="text" name="prosecutor.name" value={formData.prosecutor.name} onChange={handleChange} />
@@ -387,18 +434,12 @@ function Arraignment() {
         </div>
       </div>
 
-      <div className="tpl-section">
-        <span className="tpl-section-title">Generated Template</span>
-        <textarea className="tpl-output" value={renderedTemplate} readOnly />
-        <div className="tpl-copy-row">
-          <button className={`tpl-btn-copy${isCopied ? " copied" : ""}`} onClick={handleCopyClick.bind(null, "richtext")}>
-            {isCopied ? "✓ Copied!" : "Copy Rich Text"}
-          </button>
-          <button className={`tpl-btn-copy${isCopied ? " copied" : ""}`} onClick={handleCopyClick.bind(null, "source")}>
-            {isCopied ? "✓ Copied!" : "Copy Source HTML"}
-          </button>
-        </div>
-      </div>
+      <OutputSection
+        renderedTemplate={renderedTemplate}
+        copiedKey={copiedKey}
+        onCopy={handleCopyClick}
+        onPrint={() => window.print()}
+      />
 
     </div>
   );

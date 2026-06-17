@@ -1,5 +1,7 @@
 import pleaDealTemplate from "../templates/plea-deal.hbs?raw";
 import { useTemplateForm } from "../useTemplateForm";
+import { useAttorney } from "../../../context/AttorneyContext";
+import OutputSection from "../OutputSection";
 import "./PleaDeal.css";
 
 interface PleaDealFormData {
@@ -12,7 +14,13 @@ interface PleaDealFormData {
   hasCounsel: boolean;
 }
 
+function formatDraftTime(iso: string) {
+  return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
 function PleaDeal() {
+  const { profiles } = useAttorney();
+
   const initialData: PleaDealFormData = {
     defendant: { name: "" },
     prosecutor: {
@@ -31,13 +39,17 @@ function PleaDeal() {
     formData,
     setFormData,
     renderedTemplate,
-    isCopied,
+    copiedKey,
+    draftBanner,
+    restoreDraft,
+    dismissDraft,
     handleChange,
     removeItem,
     handleCopyClick,
   } = useTemplateForm({
     initialData,
     template: pleaDealTemplate,
+    draftKey: "draft_plea_deal",
     transformData: (data) => ({
       ...data,
       prosecutor: { ...data.prosecutor, name: data.prosecutor.name.toUpperCase() },
@@ -51,6 +63,24 @@ function PleaDeal() {
     },
   });
 
+  const fillProsecutorFromCharacter = (id: string) => {
+    const p = profiles.find((x) => x.id === id);
+    if (!p) return;
+    setFormData((prev) => ({
+      ...prev,
+      prosecutor: { ...prev.prosecutor, name: p.name, stateBar: p.stateBar, rank: p.role },
+    }));
+  };
+
+  const fillDefenseFromCharacter = (id: string) => {
+    const p = profiles.find((x) => x.id === id);
+    if (!p) return;
+    setFormData((prev) => ({
+      ...prev,
+      defenseAttorney: { name: p.name },
+    }));
+  };
+
   const addGuiltyCharge = () => setFormData((prev) => ({ ...prev, guiltyCharges: [...prev.guiltyCharges, ""] }));
   const addDismissedCharge = () => setFormData((prev) => ({ ...prev, dismissedCharges: [...prev.dismissedCharges, ""] }));
   const addSentencingRecommendation = () => setFormData((prev) => ({ ...prev, sentencingRecommendations: [...prev.sentencingRecommendations, ""] }));
@@ -61,6 +91,16 @@ function PleaDeal() {
 
   return (
     <div className="tpl-page">
+
+      {draftBanner && (
+        <div className="tpl-draft-banner">
+          <span>Unsaved draft from {formatDraftTime(draftBanner.savedAt)} — restore?</span>
+          <div className="tpl-draft-banner-actions">
+            <button className="tpl-draft-btn-restore" onClick={restoreDraft}>Restore</button>
+            <button className="tpl-draft-btn-dismiss" onClick={dismissDraft}>Dismiss</button>
+          </div>
+        </div>
+      )}
 
       <div className="tpl-section">
         <span className="tpl-section-title">
@@ -81,8 +121,39 @@ function PleaDeal() {
 
         {formData.hasCounsel && (
           <div className="tpl-group">
+            {profiles.length > 0 && (
+              <div className="tpl-fill-row" style={{ marginBottom: "0.5rem" }}>
+                <span className="tpl-fill-label">Fill defense from character →</span>
+                <select
+                  className="tpl-fill-select"
+                  value=""
+                  onChange={(e) => fillDefenseFromCharacter(e.target.value)}
+                >
+                  <option value="" disabled>— select character —</option>
+                  {profiles.map((p) => (
+                    <option key={p.id} value={p.id}>{p.label}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <label className="tpl-label">Defense Attorney Name</label>
             <input className="tpl-input" type="text" name="defenseAttorney.name" value={formData.defenseAttorney.name} onChange={handleChange} />
+          </div>
+        )}
+
+        {profiles.length > 0 && (
+          <div className="tpl-fill-row">
+            <span className="tpl-fill-label">Fill prosecutor from character →</span>
+            <select
+              className="tpl-fill-select"
+              value=""
+              onChange={(e) => fillProsecutorFromCharacter(e.target.value)}
+            >
+              <option value="" disabled>— select character —</option>
+              {profiles.map((p) => (
+                <option key={p.id} value={p.id}>{p.label}</option>
+              ))}
+            </select>
           </div>
         )}
 
@@ -160,18 +231,12 @@ function PleaDeal() {
         <button className="tpl-btn-add" onClick={addSentencingRecommendation}>+ Add Sentencing Recommendation</button>
       </div>
 
-      <div className="tpl-section">
-        <span className="tpl-section-title">Generated Template</span>
-        <textarea className="tpl-output" value={renderedTemplate} readOnly />
-        <div className="tpl-copy-row">
-          <button className={`tpl-btn-copy${isCopied ? " copied" : ""}`} onClick={handleCopyClick.bind(null, "richtext")}>
-            {isCopied ? "✓ Copied!" : "Copy Rich Text"}
-          </button>
-          <button className={`tpl-btn-copy${isCopied ? " copied" : ""}`} onClick={handleCopyClick.bind(null, "source")}>
-            {isCopied ? "✓ Copied!" : "Copy Source HTML"}
-          </button>
-        </div>
-      </div>
+      <OutputSection
+        renderedTemplate={renderedTemplate}
+        copiedKey={copiedKey}
+        onCopy={handleCopyClick}
+        onPrint={() => window.print()}
+      />
 
     </div>
   );

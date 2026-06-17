@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { renderTemplate } from "../../utils/TemplateEngine";
 import set from "lodash/set";
 
@@ -7,6 +7,8 @@ interface UseTemplateFormOptions<T extends object, U = T> {
   template: string;
   transformData?: (data: T) => U;
   onDataChange?: (data: T) => void;
+  draftKey?: string;
+  draftTtlMs?: number;
 }
 
 export function useTemplateForm<T extends object, U = T>({
@@ -14,32 +16,88 @@ export function useTemplateForm<T extends object, U = T>({
   template,
   transformData,
   onDataChange,
+  draftKey,
+  draftTtlMs = 3_600_000,
 }: UseTemplateFormOptions<T, U>) {
-  const [isCopied, setIsCopied] = useState(false);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [renderedTemplate, setRenderedTemplate] = useState("");
   const [formData, setFormData] = useState<T>(initialData);
+
+  // Draft autosave state
+  const [draftBanner, setDraftBanner] = useState<{ savedAt: string } | null>(null);
+  const pendingDraftRef = useRef<T | null>(null);
+  const isInitialMount = useRef(true);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // On mount: check for an unexpired draft
+  useEffect(() => {
+    if (!draftKey) return;
+    try {
+      const raw = localStorage.getItem(draftKey);
+      if (!raw) return;
+      const { data, savedAt } = JSON.parse(raw) as { data: T; savedAt: string };
+      const age = Date.now() - new Date(savedAt).getTime();
+      if (age < draftTtlMs) {
+        pendingDraftRef.current = data;
+        setDraftBanner({ savedAt });
+      } else {
+        localStorage.removeItem(draftKey);
+      }
+    } catch {
+      // ignore corrupt drafts
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const restoreDraft = () => {
+    if (pendingDraftRef.current) {
+      setFormData(pendingDraftRef.current);
+    }
+    setDraftBanner(null);
+    pendingDraftRef.current = null;
+  };
+
+  const dismissDraft = () => {
+    if (draftKey) localStorage.removeItem(draftKey);
+    setDraftBanner(null);
+    pendingDraftRef.current = null;
+  };
 
   // Render template whenever form data changes
   useEffect(() => {
     const render = async () => {
       let computedData: any = { ...formData } as any;
-
-      // Apply custom transformation if provided
       if (transformData) {
         computedData = transformData(formData);
       }
-
       const output = await renderTemplate(template, computedData);
       setRenderedTemplate(output);
     };
 
     render();
 
-    // Call optional callback when data changes
     if (onDataChange) {
       onDataChange(formData);
     }
-  }, [formData, template, transformData, onDataChange]);
+
+    // Debounced autosave (skip the very first run so we don't overwrite a valid draft)
+    if (draftKey) {
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+      } else {
+        if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+        saveTimerRef.current = setTimeout(() => {
+          localStorage.setItem(
+            draftKey,
+            JSON.stringify({ data: formData, savedAt: new Date().toISOString() })
+          );
+        }, 1000);
+      }
+    }
+
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
+  }, [formData, template, transformData, onDataChange, draftKey]);
 
   // Handle input/select changes
   const handleChange = (
@@ -111,13 +169,13 @@ export function useTemplateForm<T extends object, U = T>({
     });
   };
 
-  // Copy to clipboard
-  const handleCopyClick = (type: "richtext" | "source") => {
+  // Copy to clipboard — key discriminates which button is in "copied" state
+  const handleCopyClick = (type: "richtext" | "source", key: string = type) => {
     const textToCopy = renderedTemplate;
 
     const showCopiedMessage = () => {
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000);
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
     };
 
     const copyPromise =
@@ -138,7 +196,10 @@ export function useTemplateForm<T extends object, U = T>({
     formData,
     setFormData,
     renderedTemplate,
-    isCopied,
+    copiedKey,
+    draftBanner,
+    restoreDraft,
+    dismissDraft,
     handleChange,
     handleNumericInput,
     addItem,
@@ -147,7 +208,6 @@ export function useTemplateForm<T extends object, U = T>({
   };
 }
 
-// Utility function to get nested value (simple lodash-like alternative)
 function get(obj: any, path: string): any {
   const keys = path.split(".");
   let result = obj;
