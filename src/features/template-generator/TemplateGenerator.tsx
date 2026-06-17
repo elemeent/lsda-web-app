@@ -4,12 +4,16 @@ import TemplatePicker from "./TemplatePicker";
 import PleaDeal from "./plea-deal/PleaDeal";
 import Expungement from "./expungement/Expungement";
 import NolleProsequi from "./nolle-prosequi/NolleProsequi";
+import Motion from "./motion/Motion";
+import Appearance from "./appearance/Appearance";
 
 const TEMPLATE_LABELS: Record<string, string> = {
   arraignment: "Arraignment",
   "plea-deal": "Plea Agreement",
   expungement: "Expungement",
   "nolle-prosequi": "Motion to Dismiss",
+  motion: "Generic Motion",
+  appearance: "Notice of Appearance",
 };
 
 function TemplateGenerator() {
@@ -21,6 +25,8 @@ function TemplateGenerator() {
       case "plea-deal":       return <PleaDeal />;
       case "expungement":     return <Expungement />;
       case "nolle-prosequi":  return <NolleProsequi />;
+      case "motion":          return <Motion />;
+      case "appearance":      return <Appearance />;
       default:                return <TemplatePicker onSelectTemplate={setActiveTemplate} />;
     }
   };

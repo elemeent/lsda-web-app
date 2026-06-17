@@ -53,6 +53,26 @@ Handlebars.registerHelper("getOrdinal", function (value) {
   }
 });
 
+Handlebars.registerHelper("toRoman", function (value) {
+  let n = parseInt(String(value), 10);
+  if (isNaN(n) || n <= 0 || n > 3999) return String(value);
+  const vals = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+  const syms = ["M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"];
+  let result = "";
+  for (let i = 0; i < vals.length; i++) {
+    while (n >= vals[i]) {
+      result += syms[i];
+      n -= vals[i];
+    }
+  }
+  return result;
+});
+
+Handlebars.registerHelper("nl2br", function (value) {
+  const escaped = Handlebars.escapeExpression(String(value ?? ""));
+  return new Handlebars.SafeString(escaped.replace(/\n/g, "<br>"));
+});
+
 export async function renderTemplate(template: string, data: unknown) {
   const compiled = Handlebars.compile(template);
   return compiled(data);

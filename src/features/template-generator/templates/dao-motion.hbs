@@ -1,0 +1,191 @@
+<table align="center" border="0" cellpadding="3" cellspacing="2" style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; color:#353c41; font-size:14px; text-align:start">
+	<tbody>
+		<tr>
+			<td>
+				<table align="center" border="0" cellpadding="3" cellspacing="2" style="border-collapse:collapse; border-spacing:0px; color:#353c41; font-size:14px">
+					<tbody>
+						<tr>
+							<td style="text-align:right">
+								<table align="center" border="0" cellpadding="3" cellspacing="2" style="border-collapse:collapse; border-spacing:0px; color:#353c41; font-size:14px">
+									<tbody>
+										<tr>
+											<td>
+												<p style="text-align:center">
+													<span><strong><span style="font-size:28px">SUPERIOR COURT OF THE STATE OF SAN ANDREAS</span></strong></span>
+												</p>
+
+												<p style="text-align:center">
+													<span><strong><span style="font-size:28px">COUNTY OF LOS SANTOS</span></strong></span>
+												</p>
+
+												<p style="text-align:center">
+													<span><span style="font-size:28px">{{divisionLabel}}</span></span>
+												</p>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								<span><span style="text-align:left">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;</span></span>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+			<td>
+				<span><a href="https://i.ibb.co/zQMVtSr/150x150court.png" rel="external nofollow" style="background-color:transparent; color:#ffffff" target="_blank" title="Enlarge image"><img alt="150x150court.png" data-ratio="100.00" src="https://i.ibb.co/zQMVtSr/150x150court.png" style="border-style:none; vertical-align:middle" width="150"></a></span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<hr style="background-color:#ffffff; color:#555555; font-size:13px; text-align:start">
+<table align="center" border="0" cellpadding="3" cellspacing="2" style="background-color:#ffffff; border-collapse:collapse; border-spacing:0px; color:#353c41; font-size:14px; text-align:start">
+	<tbody>
+		<tr>
+			<td>
+				<div style="border:1px solid #000000; padding:15px">
+					<p>
+						<span><span style="text-align:left;text-transform:uppercase">{{plaintiffDisplay}},</span></span>
+					</p>
+
+					<p>
+						<span><strong><span style="text-align:left">(Plaintiff)</span></strong></span><br>
+						&nbsp;
+					</p>
+
+					<p>
+						<span><span style="text-align:left">- against -&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></span>
+					</p>
+
+					<p>&nbsp;</p>
+
+					{{#each defendants}}
+					<p>
+						<span><span style="text-align:left;text-transform:uppercase">{{this.name}},</span></span>
+					</p>
+					{{/each}}
+
+					<p>
+						<span><strong><span style="text-align:left">({{defendantLabel}})</span></strong></span>
+					</p>
+				</div>
+			</td>
+			<td>
+				<span><span style="text-align:left">)<br>
+				)<br>
+				)<br>
+				)<br>
+				)<br>
+				)<br>
+				)<br>
+				)</span></span>
+			</td>
+			<td>
+				<p style="text-align:center">
+					<span>Court File: {{lastTwo filingDate.year}}GJ{{#if isCriminal}}CR{{else}}CC{{/if}}{{zeroFill caseNumber 5}}</span>
+				</p>
+
+				<p style="text-align:center">
+					&nbsp;
+				</p>
+
+				<div style="background-color:#ffffff; border:1px solid #000000; padding:15px">
+					<p style="text-align:center">
+						<span><strong>{{motionTitle}}</strong></span>
+					</p>
+				</div>
+
+				<p style="text-align:center">
+					&nbsp;
+				</p>
+
+				<p style="text-align:center">
+					<span><em>Action Filed: {{filingDate.month}} {{getOrdinal filingDate.day}}, {{filingDate.year}}</em></span>
+				</p>
+
+				<p style="text-align:center">
+					&nbsp;
+				</p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<hr style="background-color:#ffffff; color:#555555; font-size:13px; text-align:start">
+
+<p style="background-color:#ffffff; color:#555555; font-size:14px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:14px; text-align:start">
+	<span><span style="font-size:16px">{{nl2br opening}}</span></span>
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:14px; text-align:start">
+	&nbsp;
+</p>
+
+{{#each sections}}
+<p style="background-color:#ffffff; color:#555555; font-size:13px; text-align:center">
+	<span><span style="font-size:16px; text-transform:uppercase"><strong><u>{{toRoman (math @index "+" 1)}}. {{this.title}}</u></strong></span></span>
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:13px; text-align:center">
+	&nbsp;
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:14px; text-align:start">
+	<span><span style="font-size:16px">{{nl2br this.body}}</span></span>
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:14px; text-align:start">
+	&nbsp;
+</p>
+{{/each}}
+
+<hr style="background-color:#ffffff; color:#555555; font-size:13px; text-align:start">
+
+<p style="background-color:#ffffff; color:#555555; font-size:13px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:13px; text-align:start">
+	Respectfully Submitted on the <u>{{getOrdinal filingDate.day}}</u> day of <u>{{filingDate.month}}</u>, <u>{{filingDate.year}}</u>.
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:13px; text-align:start">
+	&nbsp;
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:14px; text-align:right">
+	<span><u><span style="font-size:16px; text-transform:uppercase"><em>/s/&nbsp;</em>{{undersigned.name}}</span></u></span>
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:14px; text-align:right">
+	<span style="font-size:16px;">{{undersigned.name}}</span>
+</p>
+
+<p style="background-color:#ffffff; color:#555555; font-size:13px; text-align:right">
+	<span><span style="font-size:16px">San Andreas State Bar No. {{undersigned.stateBar}}</span></span>
+</p>
+
+{{#if undersigned.showFirm}}
+<p style="background-color:#ffffff; color:#555555; font-size:13px; text-align:right">
+	<span><span style="font-size:16px">{{undersigned.firm}}</span></span>
+</p>
+
+{{#if undersigned.showAddress}}
+<p style="background-color:#ffffff; color:#555555; font-size:13px; text-align:right">
+	<span><span style="font-size:16px">{{undersigned.address}}</span></span>
+</p>
+{{/if}}
+{{/if}}
+
+<p style="background-color:#ffffff; color:#555555; font-size:13px; text-align:right">
+	<span><span style="font-size:16px">{{undersigned.role}}</span></span>
+</p>
+
+<p>
+	<br>
+	(( Tag Involved Parties Here ))
+</p>
