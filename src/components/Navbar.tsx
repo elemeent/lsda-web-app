@@ -1,55 +1,53 @@
-import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import "./Navbar.css";
+import { Link, useLocation } from "react-router-dom";
+
+const NAV_LINKS = [
+  { to: "/template-generator", label: "Template Generator", internal: true },
+  { to: "https://elemeent.github.io/dao-bail-schedule", label: "Bail Schedule", internal: false },
+];
 
 function Navbar() {
-  const darkModeInitialStatus =
-    JSON.parse(localStorage.getItem("darkMode") || "false") || false;
-
-  const [isDarkMode, setIsDarkMode] = useState(darkModeInitialStatus);
-
-  useEffect(() => {
-    document.documentElement.setAttribute(
-      "data-theme",
-      isDarkMode ? "dark" : "light",
-    );
-  });
-
-  const toggleDarkMode = () => {
-    const newState = !isDarkMode;
-    setIsDarkMode(newState);
-    localStorage.setItem("darkMode", JSON.stringify(newState));
-    document.documentElement.setAttribute(
-      "data-theme",
-      newState ? "dark" : "light",
-    );
-  };
+  const { pathname } = useLocation();
 
   return (
-    <>
-      <nav>
-        <div className="nav-content">
-          <Link to="/">
-            <h2>LSDA Web App</h2>
-          </Link>
-          <ul>
-            <li>
-              <Link to="/template-generator">Template Generator</Link>
-            </li>
-            <li>
-              <a href="https://elemeent.github.io/dao-bail-schedule" target="_blank" rel="noopener noreferrer">Bail Schedule</a>
-            </li>
-          </ul>
-        </div>
-        <button
-          className="dark-mode-toggle"
-          onClick={toggleDarkMode}
-          title="Toggle dark mode"
-        >
-          {isDarkMode ? "☀️" : "🌙"}
-        </button>
-      </nav>
-    </>
+    <nav className="sticky top-0 z-50 h-14 border-b border-navy-800/60 bg-navy-950/80 backdrop-blur-md">
+      <div className="mx-auto flex h-full max-w-6xl items-center gap-8 px-5">
+        <Link to="/" className="flex items-baseline gap-1.5 shrink-0">
+          <span className="font-mono text-[0.7rem] font-medium tracking-[0.2em] uppercase text-badge">
+            LSDA
+          </span>
+          <span className="text-[0.95rem] font-semibold text-slate-100 tracking-tight">
+            Workspace
+          </span>
+        </Link>
+
+        <div className="h-4 w-px bg-navy-700" />
+
+        <ul className="flex items-center gap-1 text-sm font-medium">
+          {NAV_LINKS.map(({ to, label, internal }) => {
+            const active = internal && pathname === to;
+            const cls = [
+              "rounded-md px-3 py-1.5 transition-colors",
+              active
+                ? "text-badge bg-badge/10"
+                : "text-slate-400 hover:text-slate-100 hover:bg-navy-800/60",
+            ].join(" ");
+
+            return (
+              <li key={to}>
+                {internal ? (
+                  <Link to={to} className={cls}>{label}</Link>
+                ) : (
+                  <a href={to} target="_blank" rel="noopener noreferrer" className={cls}>
+                    {label}
+                    <span className="ml-1 text-[0.65rem] opacity-50">↗</span>
+                  </a>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </nav>
   );
 }
 
