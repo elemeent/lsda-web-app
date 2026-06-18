@@ -324,14 +324,15 @@ function Appeal() {
 
         <div className="tpl-group">
           <label className="tpl-label">Appeal Type</label>
-          <input
-            className="tpl-input"
-            type="text"
+          <select
+            className="tpl-select"
             name="appealType"
             value={formData.appealType}
             onChange={handleChange}
-            placeholder="e.g. Appeal from an Order"
-          />
+          >
+            <option value="Appeal from an Order">Appeal from an Order</option>
+            <option value="Appeal from a Judgment">Appeal from a Judgment</option>
+          </select>
         </div>
 
         <div className="tpl-group">
