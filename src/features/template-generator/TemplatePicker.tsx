@@ -2,10 +2,21 @@ const TEMPLATES = [
   {
     id: "arraignment",
     label: "Arraignment",
-    description: "Formal charge presentation with sentencing options and bail recommendations.",
+    description:
+      "Formal charge presentation with sentencing options and bail recommendations.",
     icon: (
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+        />
       </svg>
     ),
     tag: "Criminal",
@@ -13,10 +24,21 @@ const TEMPLATES = [
   {
     id: "expungement",
     label: "Expungement",
-    description: "Motion to seal or expunge prior criminal record with supporting motion text.",
+    description:
+      "Motion to seal or expunge prior criminal record with supporting motion text.",
     icon: (
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+        />
       </svg>
     ),
     tag: "Post-Conviction",
@@ -24,10 +46,21 @@ const TEMPLATES = [
   {
     id: "plea-deal",
     label: "Plea Agreement",
-    description: "Negotiated plea with guilty charges, dismissals, and sentencing terms.",
+    description:
+      "Negotiated plea with guilty charges, dismissals, and sentencing terms.",
     icon: (
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+        />
       </svg>
     ),
     tag: "Plea",
@@ -35,10 +68,21 @@ const TEMPLATES = [
   {
     id: "nolle-prosequi",
     label: "Motion to Dismiss",
-    description: "Nolle prosequi filing with dismissal reasoning and supporting grounds.",
+    description:
+      "Nolle prosequi filing with dismissal reasoning and supporting grounds.",
     icon: (
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+        />
       </svg>
     ),
     tag: "Dismissal",
@@ -46,10 +90,21 @@ const TEMPLATES = [
   {
     id: "motion",
     label: "Generic Motion",
-    description: "General-purpose motion with dynamic numbered sections. Civil or criminal, prosecution or defense.",
+    description:
+      "General-purpose motion with dynamic numbered sections. Civil or criminal, prosecution or defense.",
     icon: (
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z" />
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75M12 20.25c1.472 0 2.882.265 4.185.75M18.75 4.97A48.416 48.416 0 0 0 12 4.5c-2.291 0-4.545.16-6.75.47m13.5 0c1.01.143 2.01.317 3 .52m-3-.52 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.988 5.988 0 0 1-2.031.352 5.988 5.988 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L18.75 4.971Zm-16.5.52c.99-.203 1.99-.377 3-.52m0 0 2.62 10.726c.122.499-.106 1.028-.589 1.202a5.989 5.989 0 0 1-2.031.352 5.989 5.989 0 0 1-2.031-.352c-.483-.174-.711-.703-.59-1.202L5.25 4.971Z"
+        />
       </svg>
     ),
     tag: "Motion",
@@ -57,13 +112,46 @@ const TEMPLATES = [
   {
     id: "appearance",
     label: "Notice of Appearance",
-    description: "Formal notice entering an attorney as counsel of record for a client in a civil or criminal matter.",
+    description:
+      "Formal notice entering an attorney as counsel of record for a client in a civil or criminal matter.",
     icon: (
-      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+        />
       </svg>
     ),
     tag: "Appearance",
+  },
+  {
+    id: "appeal",
+    label: "Appeal Brief",
+    description:
+      "Appellate brief for the Second Court of Appeal with dynamic sections and parties.",
+    icon: (
+      <svg
+        className="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0c1.1.128 1.907 1.077 1.907 2.185Z"
+        />
+      </svg>
+    ),
+    tag: "Appeal",
   },
 ];
 
@@ -103,13 +191,22 @@ function TemplatePicker({ onSelectTemplate }: TemplatePickerProps) {
                   {tag}
                 </span>
               </div>
-              <p className="mt-1 text-sm text-slate-500 leading-relaxed">{description}</p>
+              <p className="mt-1 text-sm text-slate-500 leading-relaxed">
+                {description}
+              </p>
             </div>
             <svg
               className="mt-1 h-4 w-4 shrink-0 text-navy-600 transition-all group-hover:translate-x-0.5 group-hover:text-badge"
-              fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="m9 18 6-6-6-6" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m9 18 6-6-6-6"
+              />
             </svg>
           </button>
         ))}

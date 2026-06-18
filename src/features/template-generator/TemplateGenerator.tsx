@@ -7,6 +7,7 @@ import Expungement from "./expungement/Expungement";
 import NolleProsequi from "./nolle-prosequi/NolleProsequi";
 import Motion from "./motion/Motion";
 import Appearance from "./appearance/Appearance";
+import Appeal from "./appeal/Appeal";
 
 const TEMPLATE_LABELS: Record<string, string> = {
   arraignment: "Arraignment",
@@ -15,6 +16,7 @@ const TEMPLATE_LABELS: Record<string, string> = {
   "nolle-prosequi": "Motion to Dismiss",
   motion: "Generic Motion",
   appearance: "Notice of Appearance",
+  appeal: "Appeal Brief",
 };
 
 const VALID_TEMPLATES = Object.keys(TEMPLATE_LABELS);
@@ -44,6 +46,7 @@ function TemplateGenerator() {
       case "nolle-prosequi":  return <NolleProsequi />;
       case "motion":          return <Motion />;
       case "appearance":      return <Appearance />;
+      case "appeal":          return <Appeal />;
       default:                return <TemplatePicker onSelectTemplate={selectTemplate} />;
     }
   };
