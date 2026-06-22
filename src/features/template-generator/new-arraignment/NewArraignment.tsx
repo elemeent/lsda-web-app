@@ -1,0 +1,517 @@
+import { useState } from "react";
+import { useTemplateForm } from "../useTemplateForm";
+import { useAttorney } from "../../../context/AttorneyContext";
+import newArraignmentTemplate from "../templates/new-arraignment.hbs?raw";
+import OutputSection from "../OutputSection";
+import "../arraignment/Arraignment.css";
+
+interface NewArraignmentFormData {
+  caseNumber: string;
+  defendant: { name: string };
+  prosecutor: { name: string; stateBar: string; rank: string };
+  counts: { crime: string; justification: string }[];
+  exhibits: { number: string; title: string }[];
+  introduction: string;
+  prayer: string;
+  sentencing: {
+    option: string;
+    maxStatutoryObservation: string;
+    otherObservation: string;
+  };
+  bail: {
+    option: string;
+    upholdStationhouseValue: string;
+    imposeValue: string;
+    abstainAlcohol: boolean;
+    appearCourt: boolean;
+    abstainCriminalActivity: boolean;
+    wearAnkleMonitor: boolean;
+    surrenderFirearms: boolean;
+    possessCellPhone: boolean;
+    refrainContact: boolean;
+    refrainGang: boolean;
+    imposeOther: boolean;
+    imposeOtherObservation: string;
+    felonyViolence: boolean;
+    maxSentence: boolean;
+    historyViolatingBail: boolean;
+    threatenWitness: boolean;
+    noBailConditions: boolean;
+    orderDetentionOther: boolean;
+    orderDetentionOtherObservation: string;
+  };
+  fillingDate: { day: string; month: string; year: string };
+}
+
+const monthNames = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December",
+];
+
+function formatDraftTime(iso: string) {
+  return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function NewArraignment() {
+  const { profiles } = useAttorney();
+  const today = new Date();
+  const initialDay = String(today.getDate()).padStart(2, "0");
+  const initialMonth = monthNames[today.getMonth()];
+  const initialYear = String(today.getFullYear());
+
+  const [exhibitPattern, setExhibitPattern] = useState<"numbers" | "letters">("numbers");
+
+  const initialData: NewArraignmentFormData = {
+    caseNumber: "",
+    defendant: { name: "" },
+    prosecutor: {
+      name: localStorage.getItem("prosecutorName") || "",
+      stateBar: localStorage.getItem("prosecutorStateBar") || "",
+      rank: localStorage.getItem("prosecutorRank") || "",
+    },
+    counts: [{ crime: "", justification: "" }],
+    exhibits: [{ number: "", title: "" }],
+    introduction: "",
+    prayer: "",
+    sentencing: { option: "", maxStatutoryObservation: "", otherObservation: "" },
+    bail: {
+      option: "",
+      upholdStationhouseValue: "",
+      imposeValue: "",
+      abstainAlcohol: false,
+      appearCourt: false,
+      abstainCriminalActivity: false,
+      wearAnkleMonitor: false,
+      surrenderFirearms: false,
+      possessCellPhone: false,
+      refrainContact: false,
+      refrainGang: false,
+      imposeOther: false,
+      imposeOtherObservation: "",
+      felonyViolence: false,
+      maxSentence: false,
+      historyViolatingBail: false,
+      threatenWitness: false,
+      noBailConditions: false,
+      orderDetentionOther: false,
+      orderDetentionOtherObservation: "",
+    },
+    fillingDate: { day: initialDay, month: initialMonth, year: initialYear },
+  };
+
+  const {
+    formData,
+    setFormData,
+    renderedTemplate,
+    copiedKey,
+    draftBanner,
+    restoreDraft,
+    dismissDraft,
+    handleChange,
+    handleNumericInput,
+    removeItem,
+    handleCopyClick,
+  } = useTemplateForm({
+    initialData,
+    template: newArraignmentTemplate,
+    draftKey: "draft_new_arraignment",
+    transformData: (data) => ({
+      ...data,
+      defendant: {
+        name: data.defendant.name,
+        nameUpper: data.defendant.name.toUpperCase(),
+      },
+      caseNumber: String(data.caseNumber || "0"),
+      exhibits: data.exhibits.map((exhibit, index) => ({
+        ...exhibit,
+        number:
+          exhibitPattern === "letters"
+            ? String.fromCharCode(65 + index)
+            : String(index + 1),
+      })),
+      prosecutor: { ...data.prosecutor, name: data.prosecutor.name.toUpperCase() },
+      sentencing: {
+        capitalPunishment: data.sentencing.option === "capitalPunishment",
+        lifeWithoutParole: data.sentencing.option === "lifeWithoutParole",
+        lifeWithParole: data.sentencing.option === "lifeWithParole",
+        maxStatutory:
+          data.sentencing.option === "maxStatutory"
+            ? data.sentencing.maxStatutoryObservation || " "
+            : false,
+        timeServed: data.sentencing.option === "timeServed",
+        other:
+          data.sentencing.option === "other"
+            ? data.sentencing.otherObservation || " "
+            : false,
+      },
+      bail: {
+        upholdStationhouse: {
+          selected: data.bail.option === "upholdStationhouse",
+          value:
+            data.bail.option === "upholdStationhouse"
+              ? data.bail.upholdStationhouseValue || "AMOUNT"
+              : false,
+        },
+        imposeBail: {
+          selected: data.bail.option === "imposeBail",
+          value:
+            data.bail.option === "imposeBail"
+              ? data.bail.imposeValue || "AMOUNT"
+              : false,
+          abstainAlcohol: data.bail.option === "imposeBail" ? data.bail.abstainAlcohol : false,
+          appearCourt: data.bail.option === "imposeBail" ? data.bail.appearCourt : false,
+          abstainCriminalActivity: data.bail.option === "imposeBail" ? data.bail.abstainCriminalActivity : false,
+          wearAnkleMonitor: data.bail.option === "imposeBail" ? data.bail.wearAnkleMonitor : false,
+          surrenderFirearms: data.bail.option === "imposeBail" ? data.bail.surrenderFirearms : false,
+          possessCellPhone: data.bail.option === "imposeBail" ? data.bail.possessCellPhone : false,
+          refrainContact: data.bail.option === "imposeBail" ? data.bail.refrainContact : false,
+          refrainGang: data.bail.option === "imposeBail" ? data.bail.refrainGang : false,
+          other:
+            data.bail.imposeOther && data.bail.option === "imposeBail"
+              ? data.bail.imposeOtherObservation || " "
+              : false,
+        },
+        orderDetention: {
+          selected: data.bail.option === "orderDetention",
+          felonyViolence: data.bail.option === "orderDetention" ? data.bail.felonyViolence : false,
+          maxSentence: data.bail.option === "orderDetention" ? data.bail.maxSentence : false,
+          historyViolatingBail: data.bail.option === "orderDetention" ? data.bail.historyViolatingBail : false,
+          threatenWitness: data.bail.option === "orderDetention" ? data.bail.threatenWitness : false,
+          noBailConditions: data.bail.option === "orderDetention" ? data.bail.noBailConditions : false,
+          other:
+            data.bail.orderDetentionOther && data.bail.option === "orderDetention"
+              ? data.bail.orderDetentionOtherObservation || " "
+              : false,
+        },
+      },
+    }),
+    onDataChange: (data) => {
+      localStorage.setItem("prosecutorName", data.prosecutor.name);
+      localStorage.setItem("prosecutorStateBar", data.prosecutor.stateBar);
+      localStorage.setItem("prosecutorRank", data.prosecutor.rank);
+    },
+  });
+
+  const fillFromCharacter = (id: string) => {
+    const p = profiles.find((x) => x.id === id);
+    if (!p) return;
+    setFormData((prev) => ({
+      ...prev,
+      prosecutor: { ...prev.prosecutor, name: p.name, stateBar: p.stateBar, rank: p.role },
+    }));
+  };
+
+  const addCount = () =>
+    setFormData((prev) => ({ ...prev, counts: [...prev.counts, { crime: "", justification: "" }] }));
+
+  const addExhibit = () =>
+    setFormData((prev) => ({ ...prev, exhibits: [...prev.exhibits, { number: "", title: "" }] }));
+
+  const removeCount = (index: number) => removeItem("counts", index);
+  const removeExhibit = (index: number) => removeItem("exhibits", index);
+
+  return (
+    <div className="tpl-page">
+
+      {draftBanner && (
+        <div className="tpl-draft-banner">
+          <span>Unsaved draft from {formatDraftTime(draftBanner.savedAt)} — restore?</span>
+          <div className="tpl-draft-banner-actions">
+            <button className="tpl-draft-btn-restore" onClick={restoreDraft}>Restore</button>
+            <button className="tpl-draft-btn-dismiss" onClick={dismissDraft}>Dismiss</button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Case & Parties ── */}
+      <div className="tpl-section">
+        <span className="tpl-section-title">Case &amp; Parties</span>
+
+        <div className="tpl-group">
+          <label className="tpl-label">Case Number</label>
+          <input
+            className="tpl-input"
+            type="text"
+            name="caseNumber"
+            value={formData.caseNumber}
+            onChange={(e) => handleNumericInput(e, "caseNumber", 99999, 0)}
+            placeholder="e.g. 487"
+            maxLength={5}
+          />
+        </div>
+
+        <div className="tpl-group">
+          <label className="tpl-label">Defendant Name</label>
+          <input
+            className="tpl-input"
+            type="text"
+            name="defendant.name"
+            value={formData.defendant.name}
+            onChange={handleChange}
+            placeholder="Full name of the defendant"
+          />
+        </div>
+
+        {profiles.length > 0 && (
+          <div className="tpl-fill-row">
+            <span className="tpl-fill-label">Fill prosecutor from character →</span>
+            <select
+              className="tpl-fill-select"
+              value=""
+              onChange={(e) => fillFromCharacter(e.target.value)}
+            >
+              <option value="" disabled>— select character —</option>
+              {profiles.map((p) => (
+                <option key={p.id} value={p.id}>{p.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div className="tpl-group">
+          <label className="tpl-label">Prosecutor Name</label>
+          <input className="tpl-input" type="text" name="prosecutor.name" value={formData.prosecutor.name} onChange={handleChange} />
+        </div>
+        <div className="tpl-group">
+          <label className="tpl-label">Prosecutor State Bar</label>
+          <input className="tpl-input" type="text" name="prosecutor.stateBar" value={formData.prosecutor.stateBar} onChange={handleChange} />
+        </div>
+        <div className="tpl-group">
+          <label className="tpl-label">Prosecutor Rank</label>
+          <select className="tpl-select" name="prosecutor.rank" value={formData.prosecutor.rank} onChange={handleChange}>
+            <option value="">Select Rank</option>
+            <option value="Deputy District Attorney">Deputy District Attorney</option>
+            <option value="Assistant District Attorney">Assistant District Attorney</option>
+            <option value="Chief District Attorney">Chief District Attorney</option>
+            <option value="District Attorney">District Attorney</option>
+          </select>
+        </div>
+      </div>
+
+      {/* ── Custom Introduction ── */}
+      <div className="tpl-section">
+        <span className="tpl-section-title">Introduction <span style={{ fontWeight: 400, opacity: 0.6, fontSize: "0.8em" }}>(optional)</span></span>
+        <div className="tpl-group">
+          <label className="tpl-label">Custom Introduction</label>
+          <textarea
+            className="tpl-input"
+            name="introduction"
+            value={formData.introduction}
+            onChange={handleChange}
+            rows={5}
+            style={{ resize: "vertical" }}
+            placeholder={"Leave blank to use the default introduction.\nEach line becomes a separate paragraph with a spacer before it."}
+          />
+        </div>
+      </div>
+
+      {/* ── Counts ── */}
+      <div className="tpl-section">
+        <span className="tpl-section-title">Counts</span>
+        {formData.counts.map((count, index) => (
+          <div key={index} className="tpl-group">
+            <div className="tpl-row">
+              <div className="tpl-group" style={{ flex: 1 }}>
+                <label className="tpl-label">Count {index + 1} — Crime</label>
+                <input
+                  className="tpl-input"
+                  type="text"
+                  name={`counts[${index}].crime`}
+                  value={count.crime}
+                  onChange={handleChange}
+                  placeholder="e.g. Murder in the First Degree (SAPC § 187)"
+                />
+                <label className="tpl-label" style={{ marginTop: "0.5rem" }}>Factual Justification (optional)</label>
+                <textarea
+                  className="tpl-input"
+                  name={`counts[${index}].justification`}
+                  value={count.justification}
+                  onChange={handleChange}
+                  placeholder="Briefly describe the facts supporting this charge..."
+                  rows={3}
+                  style={{ resize: "vertical" }}
+                />
+              </div>
+              {formData.counts.length > 1 && (
+                <button className="tpl-btn-remove" onClick={() => removeCount(index)} title="Remove">−</button>
+              )}
+            </div>
+          </div>
+        ))}
+        <button className="tpl-btn-add" onClick={addCount}>+ Add Count</button>
+      </div>
+
+      {/* ── Exhibits ── */}
+      <div className="tpl-section">
+        <span className="tpl-section-title">Exhibits</span>
+        {formData.exhibits.map((_, index) => (
+          <div key={index} className="tpl-group">
+            <div className="tpl-row">
+              <div className="tpl-group" style={{ flex: 1 }}>
+                <label className="tpl-label">Exhibit {index + 1} — Title</label>
+                <input
+                  className="tpl-input"
+                  type="text"
+                  name={`exhibits[${index}].title`}
+                  value={formData.exhibits[index].title}
+                  onChange={handleChange}
+                  placeholder="e.g. Body Camera Footage"
+                />
+              </div>
+              {formData.exhibits.length > 1 && (
+                <button className="tpl-btn-remove" onClick={() => removeExhibit(index)} title="Remove">−</button>
+              )}
+            </div>
+          </div>
+        ))}
+        <button className="tpl-btn-add" onClick={addExhibit}>+ Add Exhibit</button>
+
+        <div className="tpl-option-group" style={{ marginTop: "1rem" }}>
+          <span className="tpl-option-group-label">Exhibit Numbering Pattern</span>
+          <label className="tpl-check">
+            <input type="radio" name="exhibitPattern" value="numbers" checked={exhibitPattern === "numbers"} onChange={(e) => setExhibitPattern(e.target.value as "numbers" | "letters")} />
+            Numbers (1, 2, 3…)
+          </label>
+          <label className="tpl-check">
+            <input type="radio" name="exhibitPattern" value="letters" checked={exhibitPattern === "letters"} onChange={(e) => setExhibitPattern(e.target.value as "numbers" | "letters")} />
+            Letters (A, B, C…)
+          </label>
+        </div>
+      </div>
+
+      {/* ── Prayer for Relief ── */}
+      <div className="tpl-section">
+        <span className="tpl-section-title">Prayer for Relief</span>
+        <div className="tpl-group">
+          <label className="tpl-label">Prayer Items</label>
+          <textarea
+            className="tpl-input"
+            name="prayer"
+            value={formData.prayer}
+            onChange={handleChange}
+            rows={6}
+            style={{ resize: "vertical" }}
+            placeholder={`1. Accept and file this Criminal Information;\n2. Issue a warrant for the arrest of the Defendant;\n3. Set appropriate bail;\n4. Upon conviction, impose sentencing as noted herein; and\n5. Grant such other and further relief as this Court deems just and proper.`}
+          />
+        </div>
+      </div>
+
+      {/* ── Sentencing ── */}
+      <div className="tpl-section">
+        <span className="tpl-section-title">Sentencing Recommendations</span>
+        <div className="tpl-option-group">
+          <label className="tpl-check"><input type="radio" name="sentencing.option" value="capitalPunishment" checked={formData.sentencing.option === "capitalPunishment"} onChange={handleChange} />Capital Punishment</label>
+          <label className="tpl-check"><input type="radio" name="sentencing.option" value="lifeWithoutParole" checked={formData.sentencing.option === "lifeWithoutParole"} onChange={handleChange} />Life Without Parole</label>
+          <label className="tpl-check"><input type="radio" name="sentencing.option" value="lifeWithParole" checked={formData.sentencing.option === "lifeWithParole"} onChange={handleChange} />Life With Parole</label>
+          <label className="tpl-check"><input type="radio" name="sentencing.option" value="maxStatutory" checked={formData.sentencing.option === "maxStatutory"} onChange={handleChange} />Max Statutory</label>
+          {formData.sentencing.option === "maxStatutory" && (
+            <div className="tpl-indent tpl-group">
+              <label className="tpl-label">Observation</label>
+              <input className="tpl-input" type="text" name="sentencing.maxStatutoryObservation" value={formData.sentencing.maxStatutoryObservation} onChange={handleChange} placeholder="Enter observation" />
+            </div>
+          )}
+          <label className="tpl-check"><input type="radio" name="sentencing.option" value="timeServed" checked={formData.sentencing.option === "timeServed"} onChange={handleChange} />Time Served</label>
+          <label className="tpl-check"><input type="radio" name="sentencing.option" value="other" checked={formData.sentencing.option === "other"} onChange={handleChange} />Other</label>
+          {formData.sentencing.option === "other" && (
+            <div className="tpl-indent tpl-group">
+              <label className="tpl-label">Observation</label>
+              <input className="tpl-input" type="text" name="sentencing.otherObservation" value={formData.sentencing.otherObservation} onChange={handleChange} placeholder="Enter observation" />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Bail ── */}
+      <div className="tpl-section">
+        <span className="tpl-section-title">Bail Recommendations</span>
+
+        <div className="tpl-option-group">
+          <label className="tpl-check"><input type="radio" name="bail.option" value="upholdStationhouse" checked={formData.bail.option === "upholdStationhouse"} onChange={handleChange} />Uphold Stationhouse Bail</label>
+          {formData.bail.option === "upholdStationhouse" && (
+            <div className="tpl-indent tpl-group">
+              <input className="tpl-input" type="text" name="bail.upholdStationhouseValue" value={formData.bail.upholdStationhouseValue} onChange={handleChange} placeholder="Enter bail amount" />
+            </div>
+          )}
+        </div>
+
+        <div className="tpl-option-group">
+          <label className="tpl-check"><input type="radio" name="bail.option" value="imposeBail" checked={formData.bail.option === "imposeBail"} onChange={handleChange} />Impose Bail</label>
+          {formData.bail.option === "imposeBail" && (
+            <div className="tpl-indent">
+              <div className="tpl-group">
+                <label className="tpl-label">Bail Amount</label>
+                <input className="tpl-input" type="text" name="bail.imposeValue" value={formData.bail.imposeValue} onChange={handleChange} placeholder="Enter bail amount" />
+              </div>
+              <span className="tpl-indent-label">Conditions</span>
+              <label className="tpl-check"><input type="checkbox" name="bail.abstainAlcohol" checked={formData.bail.abstainAlcohol} onChange={handleChange} />Abstain from excessive use of alcohol and controlled substances.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.appearCourt" checked={formData.bail.appearCourt} onChange={handleChange} />Appear before the court on each assigned date.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.abstainCriminalActivity" checked={formData.bail.abstainCriminalActivity} onChange={handleChange} />Abstain from criminal activity while on bail.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.wearAnkleMonitor" checked={formData.bail.wearAnkleMonitor} onChange={handleChange} />Wear an ankle monitor at all times.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.surrenderFirearms" checked={formData.bail.surrenderFirearms} onChange={handleChange} />Surrender any illegal or legally owned firearms.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.possessCellPhone" checked={formData.bail.possessCellPhone} onChange={handleChange} />Possess and keep an active cell phone registered to Defendant.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.refrainContact" checked={formData.bail.refrainContact} onChange={handleChange} />Refrain from contact with any victim/witness.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.refrainGang" checked={formData.bail.refrainGang} onChange={handleChange} />Refrain from associating with known gang members or violent felons.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.imposeOther" checked={formData.bail.imposeOther} onChange={handleChange} />Other</label>
+              {formData.bail.imposeOther && (
+                <div className="tpl-indent tpl-group">
+                  <input className="tpl-input" type="text" name="bail.imposeOtherObservation" value={formData.bail.imposeOtherObservation} onChange={handleChange} placeholder="Enter other conditions" />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        <div className="tpl-option-group">
+          <label className="tpl-check"><input type="radio" name="bail.option" value="orderDetention" checked={formData.bail.option === "orderDetention"} onChange={handleChange} />Order Defendant's Detention</label>
+          {formData.bail.option === "orderDetention" && (
+            <div className="tpl-indent">
+              <label className="tpl-check"><input type="checkbox" name="bail.felonyViolence" checked={formData.bail.felonyViolence} onChange={handleChange} />Charged with a felony crime of violence with over 30 criminal points on record.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.maxSentence" checked={formData.bail.maxSentence} onChange={handleChange} />Charged with an offense for which the maximum sentence is life imprisonment or death.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.historyViolatingBail" checked={formData.bail.historyViolatingBail} onChange={handleChange} />History of violating bail conditions.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.threatenWitness" checked={formData.bail.threatenWitness} onChange={handleChange} />Serious risk of threatening, injuring, or intimidating a witness.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.noBailConditions" checked={formData.bail.noBailConditions} onChange={handleChange} />No condition or combination of conditions will reasonably assure appearance and community safety.</label>
+              <label className="tpl-check"><input type="checkbox" name="bail.orderDetentionOther" checked={formData.bail.orderDetentionOther} onChange={handleChange} />Other</label>
+              {formData.bail.orderDetentionOther && (
+                <div className="tpl-indent tpl-group">
+                  <input className="tpl-input" type="text" name="bail.orderDetentionOtherObservation" value={formData.bail.orderDetentionOtherObservation} onChange={handleChange} placeholder="Enter other reasons" />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Filing Date ── */}
+      <div className="tpl-section">
+        <span className="tpl-section-title">Filing Date</span>
+        <div className="tpl-grid-3">
+          <div className="tpl-group">
+            <label className="tpl-label">Month</label>
+            <select className="tpl-select" name="fillingDate.month" value={formData.fillingDate.month} onChange={handleChange}>
+              <option value="">Select Month</option>
+              {monthNames.map((month) => (<option key={month} value={month}>{month}</option>))}
+            </select>
+          </div>
+          <div className="tpl-group">
+            <label className="tpl-label">Day</label>
+            <input className="tpl-input" type="text" name="fillingDate.day" value={formData.fillingDate.day} onChange={(e) => handleNumericInput(e, "fillingDate.day", 31, 1)} placeholder="DD" maxLength={2} />
+          </div>
+          <div className="tpl-group">
+            <label className="tpl-label">Year</label>
+            <input className="tpl-input" type="text" name="fillingDate.year" value={formData.fillingDate.year} onChange={(e) => handleNumericInput(e, "fillingDate.year", 2200, 1)} placeholder="YYYY" maxLength={4} />
+          </div>
+        </div>
+      </div>
+
+      <OutputSection
+        renderedTemplate={renderedTemplate}
+        copiedKey={copiedKey}
+        onCopy={handleCopyClick}
+        onPrint={() => window.print()}
+      />
+
+    </div>
+  );
+}
+
+export default NewArraignment;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Arraignment from "./arraignment/Arraignment";
+import NewArraignment from "./new-arraignment/NewArraignment";
 import TemplatePicker from "./TemplatePicker";
 import PleaDeal from "./plea-deal/PleaDeal";
 import Expungement from "./expungement/Expungement";
@@ -11,6 +12,7 @@ import Appeal from "./appeal/Appeal";
 
 const TEMPLATE_LABELS: Record<string, string> = {
   arraignment: "Arraignment",
+  "new-arraignment": "Criminal Complaint",
   "plea-deal": "Plea Agreement",
   expungement: "Expungement",
   "nolle-prosequi": "Motion to Dismiss",
@@ -40,8 +42,9 @@ function TemplateGenerator() {
 
   const renderContent = () => {
     switch (activeTemplate) {
-      case "arraignment":     return <Arraignment />;
-      case "plea-deal":       return <PleaDeal />;
+      case "arraignment":       return <Arraignment />;
+      case "new-arraignment":   return <NewArraignment />;
+      case "plea-deal":         return <PleaDeal />;
       case "expungement":     return <Expungement />;
       case "nolle-prosequi":  return <NolleProsequi />;
       case "motion":          return <Motion />;

@@ -73,6 +73,18 @@ Handlebars.registerHelper("nl2br", function (value) {
   return new Handlebars.SafeString(escaped.replace(/\n/g, "<br>"));
 });
 
+Handlebars.registerHelper("paragraphs", function (value, style) {
+  const lines = String(value ?? "").split("\n").filter((l) => l.trim());
+  const s = typeof style === "string" ? style : "";
+  const html = lines
+    .map((line) => {
+      const escaped = Handlebars.escapeExpression(line.trim());
+      return `<p style="${s}">&nbsp;</p>\n<p style="${s}">${escaped}</p>`;
+    })
+    .join("\n");
+  return new Handlebars.SafeString(html);
+});
+
 export async function renderTemplate(template: string, data: unknown) {
   const compiled = Handlebars.compile(template);
   return compiled(data);
